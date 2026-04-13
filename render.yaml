@@ -13,9 +13,11 @@ services:
         sync: false
       - key: GROQ_MODEL
         value: llama3-8b-8192
-      - key: CHROMA_CLOUD_HOST
-        sync: false
       - key: CHROMA_CLOUD_TOKEN
+        sync: false
+      - key: CHROMA_CLOUD_TENANT
+        sync: false
+      - key: CHROMA_CLOUD_DATABASE
         sync: false
       - key: CHROMA_COLLECTION_NAME
         value: mutual_fund_docs

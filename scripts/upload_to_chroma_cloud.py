@@ -13,23 +13,23 @@ logger = logging.getLogger(__name__)
 def upload_to_chroma_cloud():
     """Upload local vector store to Chroma Cloud."""
     # Get configuration from environment
-    chroma_host = os.getenv("CHROMA_CLOUD_HOST")
     chroma_token = os.getenv("CHROMA_CLOUD_TOKEN")
+    chroma_tenant = os.getenv("CHROMA_CLOUD_TENANT")
+    chroma_database = os.getenv("CHROMA_CLOUD_DATABASE")
     collection_name = os.getenv("CHROMA_COLLECTION_NAME", "mutual_fund_docs")
     local_persist_dir = "./data/vector_store"
     
-    if not chroma_host:
-        logger.error("CHROMA_CLOUD_HOST not set")
+    if not chroma_token or not chroma_tenant or not chroma_database:
+        logger.error("CHROMA_CLOUD_TOKEN, CHROMA_CLOUD_TENANT, or CHROMA_CLOUD_DATABASE not set")
         return
     
-    logger.info(f"Connecting to Chroma Cloud at {chroma_host}...")
+    logger.info(f"Connecting to Chroma Cloud database: {chroma_database}...")
     
     # Connect to Chroma Cloud
-    cloud_client = chromadb.HttpClient(
-        host=chroma_host,
-        port=8000,
-        ssl=True,
-        headers={"Authorization": f"Bearer {chroma_token}"} if chroma_token else None
+    cloud_client = chromadb.CloudClient(
+        api_key=chroma_token,
+        tenant=chroma_tenant,
+        database=chroma_database
     )
     
     # Get or create collection in cloud

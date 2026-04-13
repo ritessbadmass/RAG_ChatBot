@@ -56,18 +56,11 @@ class VectorStoreService:
     
     def _init_cloud_client(self):
         """Initialize Chroma Cloud client."""
-        from chromadb import HttpClient
-        
-        self.client = HttpClient(
-            host=settings.CHROMA_CLOUD_HOST,
-            port=settings.CHROMA_CLOUD_PORT or 8000,
-            ssl=True
+        self.client = chromadb.CloudClient(
+            api_key=settings.CHROMA_CLOUD_TOKEN,
+            tenant=settings.CHROMA_CLOUD_TENANT,
+            database=settings.CHROMA_CLOUD_DATABASE
         )
-        
-        # Authenticate if credentials provided
-        if hasattr(settings, 'CHROMA_CLOUD_TOKEN') and settings.CHROMA_CLOUD_TOKEN:
-            # Chroma Cloud authentication
-            pass  # Token-based auth handled by client
         
         # Get or create collection
         self.collection = self.client.get_or_create_collection(

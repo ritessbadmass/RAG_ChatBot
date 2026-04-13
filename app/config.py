@@ -35,9 +35,9 @@ class Settings(BaseSettings):
     CHROMA_COLLECTION_NAME: str = "mutual_fund_docs"
     
     # Chroma Cloud (optional - for cloud deployment)
-    CHROMA_CLOUD_HOST: str = ""  # e.g., "api.trychroma.com"
-    CHROMA_CLOUD_PORT: int = 8000
-    CHROMA_CLOUD_TOKEN: str = ""
+    CHROMA_CLOUD_TOKEN: str = ""  # API key from Chroma Cloud
+    CHROMA_CLOUD_TENANT: str = ""  # Tenant ID
+    CHROMA_CLOUD_DATABASE: str = ""  # Database name
     
     # Database
     DATABASE_URL: str = "sqlite:///./data/chat_history.db"

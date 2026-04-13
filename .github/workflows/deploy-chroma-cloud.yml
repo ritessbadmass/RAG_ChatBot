@@ -37,8 +37,9 @@ jobs:
       - name: Upload to Chroma Cloud
         if: success()
         env:
-          CHROMA_CLOUD_HOST: ${{ secrets.CHROMA_CLOUD_HOST }}
           CHROMA_CLOUD_TOKEN: ${{ secrets.CHROMA_CLOUD_TOKEN }}
+          CHROMA_CLOUD_TENANT: ${{ secrets.CHROMA_CLOUD_TENANT }}
+          CHROMA_CLOUD_DATABASE: ${{ secrets.CHROMA_CLOUD_DATABASE }}
           CHROMA_COLLECTION_NAME: mutual_fund_docs
         run: |
           echo "Uploading vectors to Chroma Cloud..."
