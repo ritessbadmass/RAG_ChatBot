@@ -54,3 +54,6 @@ structlog==24.1.0
 black==23.12.1
 flake8==7.0.0
 mypy==1.8.0
+
+# UI
+streamlit==1.29.0

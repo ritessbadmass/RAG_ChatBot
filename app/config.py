@@ -30,9 +30,14 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"
     EMBEDDING_DEVICE: str = "cpu"  # or "cuda" if GPU available
     
-    # ChromaDB
+    # ChromaDB (Local or Cloud)
     CHROMA_PERSIST_DIRECTORY: str = "./data/vector_store"
     CHROMA_COLLECTION_NAME: str = "mutual_fund_docs"
+    
+    # Chroma Cloud (optional - for cloud deployment)
+    CHROMA_CLOUD_HOST: str = ""  # e.g., "api.trychroma.com"
+    CHROMA_CLOUD_PORT: int = 8000
+    CHROMA_CLOUD_TOKEN: str = ""
     
     # Database
     DATABASE_URL: str = "sqlite:///./data/chat_history.db"

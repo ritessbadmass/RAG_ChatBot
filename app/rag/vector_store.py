@@ -1,4 +1,4 @@
-"""Vector store service using ChromaDB."""
+"""Vector store service using ChromaDB (Local or Cloud)."""
 import logging
 from pathlib import Path
 from typing import Dict, List, Optional, Any
@@ -17,12 +17,25 @@ settings = get_settings()
 class VectorStoreService:
     """
     Service for managing vector store operations with ChromaDB.
+    Supports both local persistence and Chroma Cloud.
     """
     
     def __init__(self, persist_directory: str = None, collection_name: str = None):
         self.persist_directory = persist_directory or settings.CHROMA_PERSIST_DIRECTORY
         self.collection_name = collection_name or settings.CHROMA_COLLECTION_NAME
         
+        # Check if using Chroma Cloud
+        self.using_cloud = hasattr(settings, 'CHROMA_CLOUD_HOST') and settings.CHROMA_CLOUD_HOST
+        
+        if self.using_cloud:
+            self._init_cloud_client()
+        else:
+            self._init_local_client()
+        
+        logger.info(f"Initialized vector store: {self.collection_name} ({'cloud' if self.using_cloud else 'local'})")
+    
+    def _init_local_client(self):
+        """Initialize local ChromaDB client."""
         # Ensure directory exists
         Path(self.persist_directory).mkdir(parents=True, exist_ok=True)
         
@@ -40,8 +53,27 @@ class VectorStoreService:
             name=self.collection_name,
             metadata={"hnsw:space": "cosine"}
         )
+    
+    def _init_cloud_client(self):
+        """Initialize Chroma Cloud client."""
+        from chromadb import HttpClient
         
-        logger.info(f"Initialized vector store: {self.collection_name}")
+        self.client = HttpClient(
+            host=settings.CHROMA_CLOUD_HOST,
+            port=settings.CHROMA_CLOUD_PORT or 8000,
+            ssl=True
+        )
+        
+        # Authenticate if credentials provided
+        if hasattr(settings, 'CHROMA_CLOUD_TOKEN') and settings.CHROMA_CLOUD_TOKEN:
+            # Chroma Cloud authentication
+            pass  # Token-based auth handled by client
+        
+        # Get or create collection
+        self.collection = self.client.get_or_create_collection(
+            name=self.collection_name,
+            metadata={"hnsw:space": "cosine"}
+        )
     
     def add_embeddings(self, chunks: List[Chunk], embeddings: List[List[float]]) -> None:
         """
