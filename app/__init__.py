@@ -1,0 +1,2 @@
+"""Mutual Fund FAQ Assistant application."""
+__version__ = "1.0.0"
