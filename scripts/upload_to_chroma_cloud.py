@@ -3,6 +3,9 @@ import os
 import logging
 from pathlib import Path
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import chromadb
 from chromadb.config import Settings as ChromaSettings
 

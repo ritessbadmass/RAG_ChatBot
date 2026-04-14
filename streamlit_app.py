@@ -5,7 +5,7 @@ import uuid
 # Page configuration
 st.set_page_config(
     page_title="MF FAQ Assistant",
-    page_icon="💰",
+    page_icon=":moneybag:",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -25,143 +25,114 @@ st.markdown("""
     }
     
     .main-container {
-        max-width: 900px;
+        max-width: 800px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 40px 20px;
     }
     
     /* Header styling */
     .header {
-        background: white;
-        border-radius: 16px;
-        padding: 24px 32px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        text-align: center;
+        margin-bottom: 40px;
     }
     
     .header-title {
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 700;
         color: #1a1a2e;
-        margin: 0;
+        margin-bottom: 8px;
     }
     
     .header-subtitle {
-        font-size: 14px;
+        font-size: 16px;
         color: #64748b;
-        margin-top: 4px;
     }
     
     /* Chat container */
     .chat-container {
         background: white;
-        border-radius: 16px;
-        padding: 24px;
-        min-height: 500px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-radius: 20px;
+        padding: 32px;
+        min-height: 600px;
+        box-shadow: 0 10px 40px rgba(92, 89, 232, 0.05);
+        border: 1px solid #f1f5f9;
     }
     
     /* Message styling */
     .chat-message {
-        padding: 16px 20px;
-        margin: 12px 0;
+        padding: 16px 24px;
+        margin: 16px 0;
         border-radius: 12px;
-        max-width: 85%;
-        animation: fadeIn 0.3s ease-in;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+        max-width: 80%;
+        font-size: 15px;
+        line-height: 1.6;
     }
     
     .user-message {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #5c59e8;
         color: white;
         margin-left: auto;
-        border-bottom-right-radius: 4px;
+        border-bottom-right-radius: 2px;
     }
     
     .bot-message {
         background: #f8fafc;
         color: #1e293b;
-        border: 1px solid #e2e8f0;
-        border-bottom-left-radius: 4px;
+        border-bottom-left-radius: 2px;
     }
     
-    .message-text {
-        font-size: 15px;
-        line-height: 1.6;
-        margin: 0;
-    }
-    
-    .message-time {
-        font-size: 11px;
-        opacity: 0.7;
-        margin-top: 8px;
-    }
-    
-    /* Source badge */
-    .source-badge {
+    /* Source Badge */
+    .source-link {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        background: #dbeafe;
-        color: #1e40af;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 500;
+        color: #5c59e8;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
         margin-top: 12px;
+        padding: 6px 12px;
+        background: rgba(92, 89, 232, 0.08);
+        border-radius: 6px;
+        transition: all 0.2s;
     }
     
-    /* Input area */
-    .input-container {
-        background: white;
-        border-radius: 16px;
-        padding: 20px 24px;
-        margin-top: 16px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    .source-link:hover {
+        background: rgba(92, 89, 232, 0.15);
+        transform: translateY(-1px);
     }
     
     /* Disclaimer */
     .disclaimer {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        border-left: 4px solid #f59e0b;
-        border-radius: 8px;
-        padding: 16px 20px;
-        margin-bottom: 20px;
+        background: #fffbeb;
+        border: 1px solid #fef3c7;
+        border-radius: 12px;
+        padding: 16px 24px;
+        margin-bottom: 32px;
         font-size: 13px;
         color: #92400e;
-    }
-    
-    .disclaimer-icon {
-        font-size: 16px;
-        margin-right: 8px;
-    }
-    
-    /* Quick actions */
-    .quick-actions {
         display: flex;
+        align-items: center;
         gap: 12px;
-        flex-wrap: wrap;
-        margin: 16px 0;
     }
     
+    /* Quick Actions */
     .quick-action-btn {
-        background: #f1f5f9;
+        background: white;
         border: 1px solid #e2e8f0;
-        border-radius: 20px;
-        padding: 8px 16px;
-        font-size: 13px;
-        color: #475569;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 14px;
+        color: #1e293b;
+        font-weight: 500;
         cursor: pointer;
         transition: all 0.2s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
     
     .quick-action-btn:hover {
-        background: #e2e8f0;
-        border-color: #cbd5e1;
+        border-color: #5c59e8;
+        color: #5c59e8;
+        background: rgba(92, 89, 232, 0.02);
     }
     
     /* Sidebar */
@@ -222,7 +193,7 @@ st.markdown('<div class="main-container">', unsafe_allow_html=True)
 # Header
 st.markdown("""
 <div class="header">
-    <h1 class="header-title">💰 Mutual Fund FAQ Assistant</h1>
+    <h1 class="header-title">Mutual Fund FAQ Assistant</h1>
     <p class="header-subtitle">Get factual answers from official AMC documents</p>
 </div>
 """, unsafe_allow_html=True)
@@ -230,7 +201,7 @@ st.markdown("""
 # Disclaimer
 st.markdown("""
 <div class="disclaimer">
-    <span class="disclaimer-icon">⚠️</span>
+    <span class="disclaimer-icon">[!]</span>
     <strong>Facts-only. No investment advice.</strong> This chatbot provides factual information 
     from official AMC documents (Factsheets, SID, KIM) only. Always consult a financial advisor 
     before making investment decisions.
@@ -240,32 +211,27 @@ st.markdown("""
 # Sidebar with info
 with st.sidebar:
     st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
-    st.markdown('<p class="sidebar-title">📊 About</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sidebar-title">About</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sidebar-text">Wholesome RAG-based factual assistant for India\'s leading AMCs.</p>', unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown('<p class="sidebar-title">Official Doc Sources</p>', unsafe_allow_html=True)
     st.markdown("""
     <p class="sidebar-text">
-    This assistant answers factual questions about <strong>25 mutual fund schemes</strong> 
-    from 5 major AMCs using official documents (Factsheets, SID, KIM).
+    - SBI Mutual Fund (Official)<br>
+    - ICICI Prudential (Official)<br>
+    - HDFC Mutual Fund (Official)<br>
+    - Nippon India (Official)<br>
+    - Kotak Mahindra (Official)
     </p>
     """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown('<p class="sidebar-title">🏦 Supported AMCs</p>', unsafe_allow_html=True)
-    st.markdown("""
-    <p class="sidebar-text">
-    • SBI Mutual Fund<br>
-    • ICICI Prudential<br>
-    • HDFC Mutual Fund<br>
-    • Nippon India<br>
-    • Kotak Mahindra
-    </p>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown('<p class="sidebar-title">⏰ Data Updates</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sidebar-title">Data Updates</p>', unsafe_allow_html=True)
     st.markdown('<p class="sidebar-text">Daily at 9:15 AM IST via automated pipeline</p>', unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🔄 Start New Chat", use_container_width=True):
+    if st.button("Start New Chat", use_container_width=True):
         st.session_state.thread_id = str(uuid.uuid4())
         st.session_state.messages = []
         st.session_state.conversation_history = []
@@ -276,14 +242,13 @@ with st.sidebar:
 st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 
 # Quick action buttons
-st.markdown("<p style='font-size: 13px; color: #64748b; margin-bottom: 12px;'>💡 Try asking:</p>", unsafe_allow_html=True)
+st.markdown("<p style='font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 16px;'>Popular Questions</p>", unsafe_allow_html=True)
 quick_questions = [
-    "What is expense ratio?",
-    "SBI Blue Chip Fund details",
-    "ICICI Technology Fund holdings",
-    "Compare large cap funds"
+    "What is the expense ratio of SBI Bluechip Fund?",
+    "Minimum SIP amount for HDFC Flexi Cap?",
+    "How can I download my capital gains statement?"
 ]
-cols = st.columns(4)
+cols = st.columns(len(quick_questions))
 for i, question in enumerate(quick_questions):
     if cols[i].button(question, key=f"quick_{i}", use_container_width=True):
         st.session_state.quick_question = question
@@ -300,11 +265,14 @@ for message in st.session_state.messages:
         </div>
         """, unsafe_allow_html=True)
     else:
-        source_html = f"<div class='source-badge'>📄 {message['source']}</div>" if "source" in message else ""
+        source_url = message.get("source_url", "#")
+        source_label = message.get("source", "Official Document")
         st.markdown(f"""
         <div class="chat-message bot-message">
             <p class="message-text">{message['content']}</p>
-            {source_html}
+            <a href="{source_url}" target="_blank" class="source-link">
+                <span>[DOC] {source_label}</span>
+            </a>
         </div>
         """, unsafe_allow_html=True)
 
@@ -351,19 +319,21 @@ if prompt:
                 source = "System"
             else:
                 # Get answer from RAG
-                result = rag_service.query(
+                result = rag_service.process_query(
                     query=prompt,
-                    thread_id=st.session_state.thread_id,
-                    conversation_history=st.session_state.conversation_history[:-1]
+                    thread_history=st.session_state.conversation_history[:-1]
                 )
                 response_text = result["answer"]
                 source = result.get("source", "AMC Official Document")
             
             # Display bot response
+            source_url = result.get("source_url", "#") if "source_url" in locals() else "#"
             st.markdown(f"""
             <div class="chat-message bot-message">
                 <p class="message-text">{response_text}</p>
-                <div class='source-badge'>📄 {source}</div>
+                <a href="{source_url}" target="_blank" class="source-link">
+                    <span>[DOC] {source}</span>
+                </a>
             </div>
             """, unsafe_allow_html=True)
             
@@ -371,7 +341,8 @@ if prompt:
             st.session_state.messages.append({
                 "role": "assistant",
                 "content": response_text,
-                "source": source
+                "source": source,
+                "source_url": source_url
             })
             st.session_state.conversation_history.append({
                 "role": "assistant",
@@ -382,7 +353,7 @@ if prompt:
             error_msg = "Sorry, I encountered an error. Please try again."
             st.markdown(f"""
             <div class="chat-message bot-message">
-                <p class="message-text" style="color: #dc2626;">⚠️ {error_msg}</p>
+                <p class="message-text" style="color: #dc2626;">[ERROR] {error_msg}</p>
             </div>
             """, unsafe_allow_html=True)
             st.session_state.messages.append({"role": "assistant", "content": error_msg})
@@ -394,6 +365,6 @@ st.markdown('</div>', unsafe_allow_html=True)  # Close main-container
 # Footer
 st.markdown("""
 <div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 12px;">
-    Powered by Groq LLM • Data from official AMC sources • Updated daily at 9:15 AM IST
+    Powered by Groq LLM | Data from official AMC sources | Updated daily at 9:15 AM IST
 </div>
 """, unsafe_allow_html=True)

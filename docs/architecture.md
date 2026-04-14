@@ -118,77 +118,64 @@
 ## 2. System Overview
 
 ### 2.1 Architecture Style
-- **Pattern**: Modular microservices-inspired architecture
-- **Communication**: RESTful APIs with async support
-- **Deployment**: Containerized (Docker) with local development support
+- **Pattern**: Modular monolith with clear separation of concerns
+- **UI**: Streamlit (Python-based, single codebase for UI + backend logic)
+- **Communication**: In-process function calls (simplified architecture)
+- **Deployment**: Cloud-hosted (Render) with managed vector storage (Chroma Cloud)
 
 ### 2.2 High-Level Architecture Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              CLIENT LAYER                                    │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐                      │
-│  │   Web UI    │    │   Mobile    │    │   API       │                      │
-│  │  (React)    │    │   (Future)  │    │   Clients   │                      │
-│  └──────┬──────┘    └──────┬──────┘    └──────┬──────┘                      │
-└─────────┼──────────────────┼──────────────────┼─────────────────────────────┘
-          │                  │                  │
-          └──────────────────┼──────────────────┘
-                             ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              API GATEWAY                                     │
+│                           STREAMLIT APPLICATION                              │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │                    FastAPI Application                               │    │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐ │    │
-│  │  │   Health    │  │   Chat      │  │  Document   │  │  Thread    │ │    │
-│  │  │   Check     │  │   API       │  │  Ingestion  │  │  Mgmt      │ │    │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘  └────────────┘ │    │
-│  └─────────────────────────────────────────────────────────────────────┘    │
-└───────────────────────────────────┬─────────────────────────────────────────┘
-                                    │
-          ┌─────────────────────────┼─────────────────────────┐
-          ▼                         ▼                         ▼
+│  │                    UI + Backend (Single Process)                     │    │
+│  │                                                                      │    │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐  │    │
+│  │  │   Chat      │  │   Quick     │  │  Document   │  │  Thread    │  │    │
+│  │  │   Interface │  │   Actions   │  │  Status     │  │  History   │  │    │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘  └────────────┘  │    │
+│  │                                                                      │    │
+│  └──────────────────────────────────┬───────────────────────────────────┘    │
+└─────────────────────────────────────┼────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           RAG SERVICE LAYER                                  │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                    RAGService (app/rag/rag_service.py)               │    │
+│  │                                                                      │    │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐  │    │
+│  │  │   Query     │  │   Vector    │  │   Context   │  │  Response  │  │    │
+│  │  │   Classifier│  │   Search    │  │   Builder   │  │  Generator │  │    │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘  └────────────┘  │    │
+│  │                                                                      │    │
+│  └──────────────────────────────────┬───────────────────────────────────┘    │
+└─────────────────────────────────────┼────────────────────────────────────────┘
+                                      │
+          ┌───────────────────────────┼───────────────────────────┐
+          ▼                           ▼                           ▼
 ┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐
-│   RAG PIPELINE      │  │   QUERY PROCESSOR   │  │   CONTENT FILTER    │
-│   (LangChain)       │  │                     │  │                     │
+│   EMBEDDING SERVICE │  │   VECTOR STORE      │  │   LLM SERVICE       │
+│   (BGE-small-en)    │  │   (Chroma Cloud)    │  │   (Groq API)        │
+│                     │  │                     │  │                     │
 │  ┌───────────────┐  │  │  ┌───────────────┐  │  │  ┌───────────────┐  │
-│  │  Document     │  │  │  │  Query        │  │  │  │  Advisory     │  │
-│  │  Loader       │  │  │  │  Classifier   │  │  │  │  Detector     │  │
+│  │  BAAI/bge-    │  │  │  │  Chroma Cloud │  │  │  │  llama3-8b    │  │
+│  │  small-en-v1.5│  │  │  │  (TryChroma)  │  │  │  │  or mixtral   │  │
+│  │  (Local/Free) │  │  │  │  (Managed)    │  │  │  │  (Fast API)   │  │
 │  └───────────────┘  │  │  └───────────────┘  │  │  └───────────────┘  │
-│  ┌───────────────┐  │  │  ┌───────────────┐  │  │  ┌───────────────┐  │
-│  │  Text Splitter│  │  │  │  Intent       │  │  │  │  PII Filter   │  │
-│  └───────────────┘  │  │  │  Analyzer     │  │  │  └───────────────┘  │
-│  ┌───────────────┐  │  │  └───────────────┘  │  └─────────────────────┘
-│  │  Embeddings   │  │  └─────────────────────┘
-│  │  (OpenAI)     │  │
-│  └───────────────┘  │
-│  ┌───────────────┐  │
-│  │  Vector Store │  │
-│  │  (ChromaDB)   │  │
-│  └───────────────┘  │
-│  ┌───────────────┐  │
-│  │  Retriever    │  │
-│  └───────────────┘  │
-└─────────────────────┘
-          │
-          ▼
+└─────────────────────┘  └─────────────────────┘  └─────────────────────┘
+          │                           │                           │
+          └───────────────────────────┼───────────────────────────┘
+                                      ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              LLM LAYER                                       │
-│  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │                    OpenAI GPT-3.5/4                                  │    │
-│  │  - Response Generation                                               │    │
-│  │  - Source Citation                                                   │    │
-│  │  - Answer Formatting                                                 │    │
-│  └─────────────────────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           DATA LAYER                                         │
+│                           DATA SOURCES                                       │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐              │
-│  │   ChromaDB      │  │   SQLite/       │  │   File System   │              │
-│  │   (Vectors)     │  │   PostgreSQL    │  │   (Raw Docs)    │              │
-│  │                 │  │   (Chat History)│  │                 │              │
+│  │   Kuvera.in     │  │   Chroma Cloud  │  │   Groq API      │              │
+│  │   (Scraped)     │  │   (Persistent)  │  │   (LLM)         │              │
+│  │                 │  │                 │  │                 │              │
+│  │  25 Mutual Fund │  │  140+ Chunks    │  │  Fast Inference │              │
+│  │  URLs           │  │  Embedded       │  │  $0 Cost        │              │
 │  └─────────────────┘  └─────────────────┘  └─────────────────┘              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -227,22 +214,16 @@ jobs:
       
       - name: Run document ingestion
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CHROMA_CLOUD_TOKEN: ${{ secrets.CHROMA_CLOUD_TOKEN }}
+          CHROMA_CLOUD_TENANT: ${{ secrets.CHROMA_CLOUD_TENANT }}
+          CHROMA_CLOUD_DATABASE: ${{ secrets.CHROMA_CLOUD_DATABASE }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
-          python scripts/ingest_documents.py --update
+          python scripts/ingest_data.py
       
-      - name: Update vector store
+      - name: Verify ingestion
         run: |
-          python scripts/update_vectors.py
-      
-      - name: Commit updated data
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add data/vector_store/
-          git diff --staged --quiet || git commit -m "Daily data update: $(date +%Y-%m-%d)"
-          git push
+          echo "Data ingestion completed at $(date)"
 ```
 
 ### 3.2 Scraping Service Architecture
@@ -975,24 +956,38 @@ class DocumentIngestionPipeline:
 - Chunk Overlap: 200 tokens
 - Metadata: Source URL, document type, AMC name, scheme name, last updated
 
-#### 4.2.2 Vector Store (ChromaDB)
+#### 4.2.2 Vector Store (ChromaDB - Local or Cloud)
+
 ```python
 # app/rag/vector_store.py
-class ChromaVectorStore:
+class VectorStoreService:
     """
-    Wrapper for ChromaDB operations.
+    Service for managing vector store operations with ChromaDB.
+    Supports both local persistence and Chroma Cloud.
     """
-    - add_documents(chunks: List[DocumentChunk], embeddings: List[List[float]])
-    - similarity_search(query_embedding: List[float], k: int = 5) -> List[Document]
-    - get_collection_stats() -> Dict
-    - persist()
+    - add_embeddings(chunks: List[Chunk], embeddings: List[List[float]])
+    - search(query_embedding: List[float], n_results: int = 5) -> List[Chunk]
+    - get_stats() -> Dict
+    - Using Cloud: bool
 ```
 
 **Configuration:**
 - Collection Name: `mutual_fund_docs`
 - Distance Metric: Cosine Similarity
-- Persistence: Local filesystem (`./data/vector_store`)
-- Embedding Model: `text-embedding-3-small` (OpenAI)
+- **Cloud Mode**: Chroma Cloud (TryChroma) - persistent, managed
+- **Local Mode**: Local filesystem (`./data/vector_store`) - development only
+- Embedding Model: `BAAI/bge-small-en-v1.5` (Free, local)
+
+**Cloud Configuration:**
+```python
+# Chroma Cloud (Production)
+CHROMA_CLOUD_TOKEN=your-api-key
+CHROMA_CLOUD_TENANT=your-tenant-id
+CHROMA_CLOUD_DATABASE=your-database-name
+
+# Local (Development)
+CHROMA_PERSIST_DIRECTORY=./data/vector_store
+```
 
 #### 4.2.3 Query Classification Service
 ```python
@@ -1184,13 +1179,26 @@ DEBUG=false
 HOST=0.0.0.0
 PORT=8000
 
-# OpenAI
-OPENAI_API_KEY=sk-...
-OPENAI_MODEL=gpt-3.5-turbo
-OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+# LLM Provider (Groq - Fast & Cheap)
+LLM_PROVIDER=groq
+GROQ_API_KEY=gsk-...
+GROQ_MODEL=llama3-8b-8192
 
-# ChromaDB
-CHROMA_PERSIST_DIRECTORY=./data/vector_store
+# Embeddings (Free - Local)
+EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
+EMBEDDING_DEVICE=cpu
+
+# ChromaDB - Cloud (Production) or Local (Development)
+# Option 1: Chroma Cloud (Recommended for Render deployment)
+# Get credentials from: https://trychroma.com
+CHROMA_CLOUD_TOKEN=ck-your-chroma-cloud-token
+CHROMA_CLOUD_TENANT=your-tenant-uuid
+CHROMA_CLOUD_DATABASE=your-database-name
+
+# Option 2: Local ChromaDB (Development only - data lost on restart)
+# Uncomment below if NOT using Chroma Cloud
+# CHROMA_PERSIST_DIRECTORY=./data/vector_store
+
 CHROMA_COLLECTION_NAME=mutual_fund_docs
 
 # Database
@@ -1232,7 +1240,112 @@ DISCLAIMER="Facts-only. No investment advice."
 
 ## 9. Deployment
 
-### 9.1 Docker Configuration
+### 9.1 Architecture Overview
+
+The deployment uses a **hybrid cloud architecture**:
+- **Frontend/UI**: Streamlit (Python-based, single codebase)
+- **Backend**: FastAPI embedded within Streamlit
+- **Vector Store**: Chroma Cloud (managed, persistent)
+- **LLM**: Groq API (fast inference)
+- **Hosting**: Render (free tier with UptimeRobot for 24/7 uptime)
+
+### 9.2 Chroma Cloud Configuration
+
+We use **Chroma Cloud** (TryChroma) for managed vector storage:
+
+**Benefits:**
+- No local disk persistence needed
+- Automatic backups
+- Scalable storage
+- Free tier available
+
+**Configuration:**
+```python
+# app/config.py
+CHROMA_CLOUD_TOKEN: str = ""      # API key from Chroma Cloud
+CHROMA_CLOUD_TENANT: str = ""     # Tenant ID
+CHROMA_CLOUD_DATABASE: str = ""   # Database name
+CHROMA_COLLECTION_NAME: str = "mutual_fund_docs"
+```
+
+**Environment Variables:**
+```bash
+CHROMA_CLOUD_TOKEN=your-chroma-cloud-api-key
+CHROMA_CLOUD_TENANT=your-tenant-id
+CHROMA_CLOUD_DATABASE=your-database-name
+CHROMA_COLLECTION_NAME=mutual_fund_docs
+```
+
+### 9.3 Render Deployment
+
+**render.yaml:**
+```yaml
+services:
+  - type: web
+    name: mutual-fund-faq-assistant
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run streamlit_app.py --server.port=$PORT --server.address=0.0.0.0
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant
+      - key: CHROMA_CLOUD_TOKEN
+        sync: false
+      - key: CHROMA_CLOUD_TENANT
+        sync: false
+      - key: CHROMA_CLOUD_DATABASE
+        sync: false
+      - key: CHROMA_COLLECTION_NAME
+        value: mutual_fund_docs
+    healthCheckPath: /_stcore/health
+```
+
+### 9.4 24/7 Uptime with UptimeRobot
+
+Since Render free tier sleeps after 15 minutes of inactivity:
+
+1. **Sign up** at https://uptimerobot.com/
+2. **Add Monitor** → HTTP(s)
+3. **URL**: Your Render app URL
+4. **Interval**: 5 minutes
+5. **Monitor Type**: HTTP(s)
+
+This pings your app every 5 minutes to prevent sleep.
+
+### 9.5 Local Development
+
+```bash
+# Setup
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your Chroma Cloud credentials
+
+# Run Streamlit UI
+python -m streamlit run streamlit_app.py --server.port=8501
+
+# Ingest documents (one-time setup)
+python scripts/ingest_data.py
+
+# Upload to Chroma Cloud (optional - for cloud persistence)
+python scripts/upload_to_chroma_cloud.py
+```
+
+**Note on Python 3.14+ Compatibility:**
+The Streamlit UI uses ASCII-only characters (no emojis/Unicode) to avoid syntax errors with Python 3.14's stricter encoding handling.
+
+### 9.6 Docker Configuration (Optional - Local Only)
+
+For local development without Chroma Cloud:
 ```yaml
 # docker-compose.yml
 version: '3.8'
@@ -1242,7 +1355,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
     volumes:
       - ./data:/app/data
     
@@ -1250,20 +1363,6 @@ services:
     image: chromadb/chroma:latest
     volumes:
       - ./data/vector_store:/chroma/chroma
-```
-
-### 9.2 Local Development
-```bash
-# Setup
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-# Run
-uvicorn app.main:app --reload
-
-# Ingest documents
-python scripts/ingest_documents.py
 ```
 
 ---
@@ -1303,16 +1402,32 @@ python scripts/ingest_documents.py
 
 ---
 
-## 12. Future Enhancements
+## 12. Implementation Status
 
-- Multi-AMC support
+### ✅ Completed
+- **Multi-AMC support**: 5 AMCs (SBI, ICICI, HDFC, Nippon, Kotak) with 25 schemes
+- **Chroma Cloud Integration**: Managed vector storage with 100+ chunks uploaded
+- **Streamlit UI**: Kuvera-inspired fintech design (ASCII-only for Python 3.14+ compatibility)
+- **Daily Data Ingestion**: GitHub Actions scheduler at 9:15 AM IST
+- **Free Tier Architecture**: Groq LLM (llama-3.1-8b-instant) + BGE embeddings + Chroma Cloud
+- **Cloud Deployment**: Render configuration with UptimeRobot for 24/7 uptime
+- **RAG Pipeline**: Query classification, advisory detection, context retrieval, LLM generation
+- **Data Upload Script**: `upload_to_chroma_cloud.py` for manual cloud sync
+
+### 🔄 In Progress
+- GitHub Actions automatic upload to Chroma Cloud (quota limits on free tier)
+- Better fund metric extraction from Kuvera pages
+- Emoji/Unicode support investigation for Python 3.14+
+
+### 📋 Future Enhancements
 - Real-time document updates via webhooks
 - Advanced analytics dashboard
-- Multi-language support
+- Multi-language support (Hindi, Tamil, etc.)
 - Voice interface
 - Caching layer (Redis)
 - Incremental updates (only changed documents)
 - A/B testing for chunking strategies
+- More AMCs (Axis, UTI, DSP, etc.)
 
 ---
 

@@ -54,6 +54,11 @@ jobs:
           LLM_PROVIDER: ${{ secrets.LLM_PROVIDER || 'groq' }}
           EMBEDDING_MODEL: BAAI/bge-small-en-v1.5
           EMBEDDING_DEVICE: cpu
+          # Chroma Cloud credentials (optional - for cloud deployment)
+          CHROMA_CLOUD_TOKEN: ${{ secrets.CHROMA_CLOUD_TOKEN }}
+          CHROMA_CLOUD_TENANT: ${{ secrets.CHROMA_CLOUD_TENANT }}
+          CHROMA_CLOUD_DATABASE: ${{ secrets.CHROMA_CLOUD_DATABASE }}
+          CHROMA_COLLECTION_NAME: mutual_fund_docs
         run: |
           echo "Starting data ingestion..."
           python scripts/ingest_data.py

@@ -25,7 +25,7 @@ class VectorStoreService:
         self.collection_name = collection_name or settings.CHROMA_COLLECTION_NAME
         
         # Check if using Chroma Cloud
-        self.using_cloud = hasattr(settings, 'CHROMA_CLOUD_HOST') and settings.CHROMA_CLOUD_HOST
+        self.using_cloud = bool(settings.CHROMA_CLOUD_TOKEN and settings.CHROMA_CLOUD_TENANT and settings.CHROMA_CLOUD_DATABASE)
         
         if self.using_cloud:
             self._init_cloud_client()

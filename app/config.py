@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     
     # Groq (recommended)
     GROQ_API_KEY: str = ""
-    GROQ_MODEL: str = "llama3-8b-8192"
+    GROQ_MODEL: str = "llama-3.1-8b-instant"
     
     # Local Embeddings (Free - BGE)
     EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"
@@ -80,7 +80,7 @@ SCRAPER_CONFIG = {
         "sbimf.com",
         "icicipruamc.com",
         "hdfcfund.com",
-        "nipponindiamf.com",
+        "nipponindiaim.com",
         "kotakmf.com",
         "amfiindia.com",
         "sebi.gov.in",
@@ -136,41 +136,47 @@ ADVISORY_PATTERNS = [
     r"worth\s+investing",
 ]
 
+# Compliance and Resources
+AMFI_RESOURCES = "https://www.amfiindia.com/investor-corner/information-center/mutual-fund-faq"
+SEBI_RESOURCES = "https://investor.sebi.gov.in/"
+LAST_UPDATED_DATE = "April 14, 2026"
+
 # Document sources
 MUTUAL_FUND_URLS = {
     "SBI": {
-        "equity_hybrid": "https://kuvera.in/mutual-funds/fund/sbi-equity-hybrid-growth--SBD24G-GR",
-        "large_cap": "https://kuvera.in/mutual-funds/fund/sbi-large-cap-growth--SBD103G-GR",
-        "contra": "https://kuvera.in/mutual-funds/fund/sbi-contra-growth--SBD036G-GR",
-        "small_cap": "https://kuvera.in/mutual-funds/fund/sbi-small-cap-growth--SBD346G-GR",
-        "nifty_50_etf": "https://kuvera.in/stocks/sbi-nifty-50-etf"
+        "portal": "https://www.sbimf.com/en-us/offer-document-sid-kim",
+        "factsheets": "https://www.sbimf.com/en-us/portfolios",
+        "large_cap": "https://www.sbimf.com/en-us/equity-schemes/sbi-large-cap-fund",
+        "small_cap": "https://www.sbimf.com/en-us/equity-schemes/sbi-small-cap-fund",
+        "contra": "https://www.sbimf.com/en-us/equity-schemes/sbi-contra-fund"
     },
     "ICICI": {
-        "bluechip": "https://kuvera.in/mutual-funds/fund/icici-prudential-bluechip-growth--8042-GR",
-        "value_discovery": "https://kuvera.in/mutual-funds/fund/icici-prudential-value-discovery-growth--8176-GR",
-        "balanced_advantage": "https://kuvera.in/mutual-funds/fund/icici-prudential-balanced-advantage-growth--8180-GR",
-        "multi_asset": "https://kuvera.in/mutual-funds/fund/icici-prudential-multi-asset-growth--8004-GR",
-        "equity_debt": "https://kuvera.in/mutual-funds/fund/icici-prudential-equity-debt-growth--8017-GR"
+        "portal": "https://www.icicipruamc.com/downloads",
+        "factsheets": "https://www.icicipruamc.com/downloads/factsheets",
+        "bluechip": "https://www.icicipruamc.com/mutual-funds/equity-funds/icici-prudential-bluechip-fund",
+        "value_discovery": "https://www.icicipruamc.com/mutual-funds/equity-funds/icici-prudential-value-discovery-fund",
+        "balanced_advantage": "https://www.icicipruamc.com/mutual-funds/hybrid-funds/icici-prudential-balanced-advantage-fund"
     },
     "HDFC": {
-        "balanced_advantage": "https://kuvera.in/mutual-funds/fund/hdfc-balanced-advantage-growth--GFGT-GR",
-        "flexi_cap": "https://kuvera.in/mutual-funds/fund/hdfc-flexicap-growth--02T-GR",
-        "mid_cap_opportunities": "https://kuvera.in/mutual-funds/fund/hdfc-mid-cap-opportunities-growth--MCOGT-GR",
-        "small_cap": "https://kuvera.in/mutual-funds/fund/hdfc-small-cap-growth--HDACG1G-GR",
-        "large_cap": "https://kuvera.in/mutual-funds/fund/hdfc-large-cap-growth--44T-GR"
+        "portal": "https://www.hdfcfund.com/investor-desk/product-literature/kim",
+        "factsheets": "https://www.hdfcfund.com/investor-desk/product-literature/factsheets",
+        "balanced_advantage": "https://www.hdfcfund.com/product-literature/product-literature-details?literature_type=kim&scheme_name=hdfc-balanced-advantage-fund",
+        "flexi_cap": "https://www.hdfcfund.com/product-literature/product-literature-details?literature_type=kim&scheme_name=hdfc-flexi-cap-fund",
+        "mid_cap_opportunities": "https://www.hdfcfund.com/product-literature/product-literature-details?literature_type=kim&scheme_name=hdfc-mid-cap-opportunities-fund"
     },
     "Nippon": {
-        "small_cap": "https://kuvera.in/mutual-funds/fund/nippon-india-small-cap-growth--SCAG-GR",
-        "nifty_50_bees": "https://kuvera.in/stocks/nippon-india-etf-nifty-50-bees",
-        "multi_cap": "https://kuvera.in/mutual-funds/fund/nippon-india-multi-cap-growth--EOAG-GR",
-        "growth_fund": "https://kuvera.in/mutual-funds/fund/nippon-india-growth-fund-growth--GFAG-GR",
-        "large_cap": "https://kuvera.in/mutual-funds/fund/nippon-india-large-cap-growth--EAAG-GR"
+        "portal": "https://mf.nipponindiaim.com/investor-services/downloads/forms",
+        "factsheets": "https://mf.nipponindiaim.com/investor-services/downloads/factsheets",
+        "small_cap": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-small-cap-fund",
+        "multi_cap": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-multi-cap-fund",
+        "large_cap": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-large-cap-fund"
     },
     "Kotak": {
-        "equity_arbitrage": "https://kuvera.in/mutual-funds/fund/kotak-equity-arbitrage-growth--KO179D-GR",
-        "midcap": "https://kuvera.in/mutual-funds/fund/kotak-emerging-equity-growth--KO123D-GR",
-        "flexicap": "https://kuvera.in/mutual-funds/fund/kotak-flexicap-growth--KO168D-GR",
-        "emerging_equities": "https://kuvera.in/mutual-funds/fund/kotak-emerging-equity-growth--KO123D-GR",
-        "small_cap": "https://kuvera.in/mutual-funds/fund/kotak-small-cap-growth--KO104D-GR"
+        "portal": "https://www.kotakmf.com/Information/forms-and-downloads",
+        "factsheets": "https://www.kotakmf.com/Information/factsheet",
+        "flexicap": "https://www.kotakmf.com/funds/equity-funds/kotak-flexicap-fund",
+        "emerging_equities": "https://www.kotakmf.com/funds/equity-funds/kotak-emerging-equity-fund",
+        "small_cap": "https://www.kotakmf.com/funds/equity-funds/kotak-small-cap-fund"
     }
 }
+

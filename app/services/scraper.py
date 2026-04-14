@@ -1,12 +1,13 @@
 """Web scraping service for mutual fund documents."""
 import hashlib
+import json
 import logging
 import os
 import re
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from urllib.parse import urlparse
 
 import requests
@@ -91,6 +92,10 @@ class MutualFundScraper:
                 raise ScrapingException(f"URL not in allowed domains: {url}")
             
             logger.info(f"Scraping URL: {url}")
+            
+            # Handle Kuvera URLs specially
+            if 'kuvera.in' in url:
+                return self._scrape_kuvera(url)
             
             # Determine document type from URL if not provided
             if doc_type is None:
@@ -235,6 +240,336 @@ class MutualFundScraper:
         
         return filepath
     
+    def _scrape_kuvera(self, url: str) -> ExtractedData:
+        """
+        Scrape Kuvera mutual fund pages.
+        Since Kuvera uses React (client-side rendering), we extract info from URL
+        and fetch basic page content for any available data.
+        """
+        try:
+            logger.info(f"Scraping Kuvera URL: {url}")
+            
+            # Extract fund info from URL
+            fund_info = self._extract_fund_info_from_url(url)
+            
+            # Download page (may have some SSR content or meta tags)
+            response = self.session.get(url, timeout=self.config['timeout'])
+            response.raise_for_status()
+            
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Try to get better fund name from page title
+            title = soup.find('title')
+            if title:
+                title_text = title.get_text()
+                # Extract fund name from title (usually "Fund Name | Kuvera")
+                if '|' in title_text:
+                    fund_name = title_text.split('|')[0].strip()
+                    if fund_name and fund_name != 'Kuvera':
+                        fund_info['fund_name'] = fund_name
+            
+            # Try to get meta description
+            meta_desc = soup.find('meta', attrs={'name': 'description'})
+            if meta_desc:
+                fund_info['description'] = meta_desc.get('content', '')
+            
+            # Get raw text for any available content
+            text = self.html_parser.extract_text(response.content)
+            
+            # Build structured content
+            structured_text = self._build_kuvera_content(fund_info, text)
+            
+            return ExtractedData(
+                source_url=url,
+                doc_type='factsheet',
+                fund_name=fund_info.get('fund_name', 'Unknown Fund'),
+                amc_name=fund_info.get('amc_name', 'Unknown AMC'),
+                raw_text=structured_text,
+                extracted_fields=fund_info,
+                scraped_at=datetime.utcnow().isoformat()
+            )
+            
+        except Exception as e:
+            logger.error(f"Failed to scrape Kuvera URL {url}: {e}")
+            return ExtractedData(
+                source_url=url,
+                error=str(e),
+                scraped_at=datetime.utcnow().isoformat()
+            )
+    
+    def _extract_fund_info_from_url(self, url: str) -> Dict[str, Any]:
+        """Extract fund information from Kuvera URL structure."""
+        data = {}
+        
+        # URL format: https://kuvera.in/mutual-funds/fund/{fund-slug}--{code}
+        # Example: sbi-bluechip-direct-growth--SBI072-GR
+        
+        parts = url.split('--')
+        if len(parts) >= 2:
+            # Extract fund slug
+            slug_part = parts[0].split('/')[-1]
+            
+            # Convert slug to readable name
+            # sbi-bluechip-direct-growth -> SBI Bluechip Direct Growth
+            words = slug_part.replace('-', ' ').split()
+            fund_name = ' '.join(word.capitalize() for word in words)
+            data['fund_name'] = fund_name
+            
+            # Extract AMC from slug
+            if words:
+                amc = words[0].upper()
+                amc_map = {
+                    'SBI': 'SBI Mutual Fund',
+                    'ICICI': 'ICICI Prudential Mutual Fund',
+                    'HDFC': 'HDFC Mutual Fund',
+                    'NIPPON': 'Nippon India Mutual Fund',
+                    'KOTAK': 'Kotak Mahindra Mutual Fund',
+                    'AXIS': 'Axis Mutual Fund',
+                    'UTI': 'UTI Mutual Fund',
+                    'DSP': 'DSP Mutual Fund',
+                    'TATA': 'Tata Mutual Fund',
+                    'LIC': 'LIC Mutual Fund'
+                }
+                data['amc_name'] = amc_map.get(amc, f'{amc} Mutual Fund')
+            
+            # Extract ISIN/code
+            code_part = parts[1].split('-')[0]
+            data['fund_code'] = code_part
+            
+            # Determine plan type
+            if 'direct' in slug_part.lower():
+                data['plan_type'] = 'Direct'
+            else:
+                data['plan_type'] = 'Regular'
+            
+            # Determine option type
+            if 'growth' in slug_part.lower():
+                data['option_type'] = 'Growth'
+            elif 'idcw' in slug_part.lower() or 'dividend' in slug_part.lower():
+                data['option_type'] = 'IDCW'
+        
+        return data
+    
+    def _build_kuvera_content(self, fund_info: Dict[str, Any], raw_text: str) -> str:
+        """Build structured content for the fund."""
+        content_parts = []
+        
+        # Add fund identification
+        content_parts.append(f"Fund Name: {fund_info.get('fund_name', 'Unknown')}")
+        content_parts.append(f"AMC: {fund_info.get('amc_name', 'Unknown')}")
+        content_parts.append(f"Plan Type: {fund_info.get('plan_type', 'Unknown')}")
+        content_parts.append(f"Option Type: {fund_info.get('option_type', 'Unknown')}")
+        
+        if 'fund_code' in fund_info:
+            content_parts.append(f"Fund Code: {fund_info['fund_code']}")
+        
+        if 'description' in fund_info:
+            content_parts.append(f"\nDescription: {fund_info['description']}")
+        
+        # Add any extracted metrics from raw text
+        content_parts.append("\n--- Additional Information ---")
+        content_parts.append(raw_text[:5000])  # Add first 5000 chars of raw text
+        
+        return '\n'.join(content_parts)
+    
+    def _extract_kuvera_fund_name(self, soup: BeautifulSoup) -> str:
+        """Extract fund name from Kuvera page."""
+        # Try multiple selectors
+        selectors = [
+            'h1[data-testid="fund-name"]',
+            'h1.fund-name',
+            'h1',
+            '[data-testid="fund-header"] h1'
+        ]
+        
+        for selector in selectors:
+            elem = soup.select_one(selector)
+            if elem:
+                return elem.get_text(strip=True)
+        
+        return "Unknown Fund"
+    
+    def _extract_kuvera_amc(self, soup: BeautifulSoup) -> str:
+        """Extract AMC name from Kuvera page."""
+        # Look for AMC in the page
+        selectors = [
+            '[data-testid="amc-name"]',
+            '.amc-name',
+            'a[href*="/mutual-funds/amc/"]'
+        ]
+        
+        for selector in selectors:
+            elem = soup.select_one(selector)
+            if elem:
+                return elem.get_text(strip=True)
+        
+        return "Unknown AMC"
+    
+    def _extract_kuvera_metrics(self, soup: BeautifulSoup) -> Dict[str, Any]:
+        """Extract key metrics from Kuvera page."""
+        data = {}
+        
+        # Try to find JSON data in script tags
+        scripts = soup.find_all('script', type='application/json')
+        for script in scripts:
+            try:
+                json_data = json.loads(script.string)
+                # Extract from JSON if available
+                if isinstance(json_data, dict):
+                    data.update(self._parse_kuvera_json(json_data))
+            except:
+                pass
+        
+        # Extract from HTML elements
+        # NAV
+        nav_elem = soup.select_one('[data-testid="nav-value"], .nav-value, .current-nav')
+        if nav_elem:
+            data['nav'] = nav_elem.get_text(strip=True)
+        
+        # Expense Ratio
+        expense_elem = soup.select_one('[data-testid="expense-ratio"], .expense-ratio')
+        if expense_elem:
+            data['expense_ratio'] = expense_elem.get_text(strip=True)
+        
+        # AUM
+        aum_elem = soup.select_one('[data-testid="aum"], .aum, .fund-size')
+        if aum_elem:
+            data['aum'] = aum_elem.get_text(strip=True)
+        
+        # Category
+        category_elem = soup.select_one('[data-testid="fund-category"], .category')
+        if category_elem:
+            data['fund_category'] = category_elem.get_text(strip=True)
+        
+        # Risk
+        risk_elem = soup.select_one('[data-testid="risk-level"], .risk, .riskometer')
+        if risk_elem:
+            data['riskometer'] = risk_elem.get_text(strip=True)
+        
+        return data
+    
+    def _parse_kuvera_json(self, json_data: Dict) -> Dict[str, Any]:
+        """Parse Kuvera JSON data structure."""
+        data = {}
+        
+        # Navigate through possible JSON structures
+        if 'props' in json_data and 'pageProps' in json_data['props']:
+            page_props = json_data['props']['pageProps']
+            
+            if 'fund' in page_props:
+                fund = page_props['fund']
+                data['fund_name'] = fund.get('name', '')
+                data['amc_name'] = fund.get('amc', '')
+                data['nav'] = fund.get('nav', '')
+                data['expense_ratio'] = fund.get('expense_ratio', '')
+                data['aum'] = fund.get('aum', '')
+                data['fund_category'] = fund.get('category', '')
+                data['riskometer'] = fund.get('risk_level', '')
+                data['benchmark'] = fund.get('benchmark', '')
+                data['min_sip_amount'] = fund.get('min_sip_amount', '')
+        
+        return data
+    
+    def _parse_kuvera_text(self, text: str) -> Dict[str, Any]:
+        """Parse Kuvera page text for fund information."""
+        data = {}
+        
+        # Fund name patterns
+        fund_patterns = [
+            r'Fund\s*Name[\s:]+([^\n]+)',
+            r'Scheme\s*Name[\s:]+([^\n]+)',
+        ]
+        fund_match = self._extract_with_patterns(text, fund_patterns)
+        if fund_match:
+            data['fund_name'] = fund_match
+        
+        # AMC patterns
+        amc_patterns = [
+            r'AMC[\s:]+([^\n]+)',
+            r'Fund\s*House[\s:]+([^\n]+)',
+            r'Asset\s*Management\s*Company[\s:]+([^\n]+)',
+        ]
+        amc_match = self._extract_with_patterns(text, amc_patterns)
+        if amc_match:
+            data['amc_name'] = amc_match
+        
+        # NAV patterns
+        nav_patterns = [
+            r'NAV[\s:]+(?:Rs\.?\s*)?([\d,.]+)',
+            r'Net\s*Asset\s*Value[\s:]+(?:Rs\.?\s*)?([\d,.]+)',
+        ]
+        nav_match = self._extract_with_patterns(text, nav_patterns)
+        if nav_match:
+            data['nav'] = f"Rs. {nav_match}"
+        
+        # Expense ratio patterns
+        expense_patterns = [
+            r'Expense\s*Ratio[\s:]+([\d.]+)\s*%?',
+            r'TER[\s:]+([\d.]+)\s*%?',
+        ]
+        expense_match = self._extract_with_patterns(text, expense_patterns)
+        if expense_match:
+            data['expense_ratio'] = f"{expense_match}%"
+        
+        # AUM patterns
+        aum_patterns = [
+            r'AUM[\s:]+(?:Rs\.?\s*)?([\d,.]+\s*(?:Cr|Lac|Lakh))',
+            r'Fund\s*Size[\s:]+(?:Rs\.?\s*)?([\d,.]+\s*(?:Cr|Lac|Lakh))',
+        ]
+        aum_match = self._extract_with_patterns(text, aum_patterns)
+        if aum_match:
+            data['aum'] = f"Rs. {aum_match}"
+        
+        # Category patterns
+        category_patterns = [
+            r'Category[\s:]+([^\n]+)',
+            r'Fund\s*Category[\s:]+([^\n]+)',
+            r'Scheme\s*Category[\s:]+([^\n]+)',
+        ]
+        category_match = self._extract_with_patterns(text, category_patterns)
+        if category_match:
+            data['fund_category'] = category_match
+        
+        # Risk patterns
+        risk_patterns = [
+            r'Risk[\s:]+(\w+)',
+            r'Riskometer[\s:]+(\w+)',
+            r'Risk\s*Level[\s:]+(\w+)',
+        ]
+        risk_match = self._extract_with_patterns(text, risk_patterns)
+        if risk_match:
+            data['riskometer'] = risk_match
+        
+        # Benchmark patterns
+        benchmark_patterns = [
+            r'Benchmark[\s:]+([^\n]+)',
+            r'Benchmark\s*Index[\s:]+([^\n]+)',
+        ]
+        benchmark_match = self._extract_with_patterns(text, benchmark_patterns)
+        if benchmark_match:
+            data['benchmark'] = benchmark_match
+        
+        # Min SIP patterns
+        sip_patterns = [
+            r'Minimum\s*SIP[\s:]+(?:Rs\.?\s*)?([\d,]+)',
+            r'Min\s*SIP[\s:]+(?:Rs\.?\s*)?([\d,]+)',
+            r'SIP\s*Minimum[\s:]+(?:Rs\.?\s*)?([\d,]+)',
+        ]
+        sip_match = self._extract_with_patterns(text, sip_patterns)
+        if sip_match:
+            data['min_sip_amount'] = f"Rs. {sip_match}"
+        
+        # Exit load patterns
+        exit_patterns = [
+            r'Exit\s*Load[\s:]+([^\n]+)',
+            r'Redemption\s*Charge[\s:]+([^\n]+)',
+        ]
+        exit_match = self._extract_with_patterns(text, exit_patterns)
+        if exit_match:
+            data['exit_load'] = exit_match
+        
+        return data
+
     def _parse_by_type(self, text: str, doc_type: str) -> Dict:
         """Parse text based on document type."""
         parsers = {

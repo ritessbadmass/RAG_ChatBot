@@ -1,54 +1,84 @@
-"""Script to run data ingestion pipeline manually or via scheduler."""
+"""Data ingestion script to scrape and populate vector store."""
 import logging
 import sys
 from pathlib import Path
 
-# Add parent directory to path
+# Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.rag.pipeline import build_urls_config, get_pipeline
+from app.config import MUTUAL_FUND_URLS
+from app.services.scraper import MutualFundScraper
+from app.rag.chunker import DocumentChunker
+from app.rag.embedder import EmbeddingService
+from app.rag.vector_store import VectorStoreService
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def main():
-    """Run the data ingestion pipeline."""
-    logger.info("=" * 60)
-    logger.info("MUTUAL FUND DATA INGESTION")
-    logger.info("=" * 60)
+def get_all_urls():
+    """Flatten the URL config into a list."""
+    urls = []
+    for amc, schemes in MUTUAL_FUND_URLS.items():
+        for scheme_name, url in schemes.items():
+            urls.append({
+                'url': url,
+                'amc': amc,
+                'scheme': scheme_name
+            })
+    return urls
+
+
+def ingest_data():
+    """Main ingestion pipeline."""
+    logger.info("Starting data ingestion pipeline...")
     
-    # Build URL configuration
-    urls_config = build_urls_config()
-    logger.info(f"Found {len(urls_config)} URLs to process")
+    # Initialize services
+    scraper = MutualFundScraper()
+    chunker = DocumentChunker()
+    embedder = EmbeddingService()
+    vector_store = VectorStoreService()
     
-    # Log URLs being processed
-    for config in urls_config:
-        logger.info(f"  - {config['amc']}: {config['scheme']}")
+    # Get all URLs
+    url_configs = get_all_urls()
+    logger.info(f"Found {len(url_configs)} URLs to process")
     
-    # Run pipeline
-    pipeline = get_pipeline()
-    stats = pipeline.run_full_pipeline(urls_config)
+    # Scrape all URLs
+    scraped_data = []
+    for config in url_configs:
+        logger.info(f"Scraping: {config['amc']} - {config['scheme']}")
+        result = scraper.scrape_url(config['url'])
+        
+        if result.error:
+            logger.error(f"Error scraping {config['url']}: {result.error}")
+            continue
+            
+        scraped_data.append(result)
+        logger.info(f"  -> Extracted {len(result.extracted_fields)} fields")
     
-    # Print summary
-    logger.info("\n" + "=" * 60)
-    logger.info("INGESTION COMPLETE")
-    logger.info("=" * 60)
-    logger.info(f"URLs processed: {stats['urls_processed']}")
-    logger.info(f"Documents scraped: {stats['documents_scraped']}")
-    logger.info(f"Chunks created: {stats['chunks_created']}")
-    logger.info(f"Embeddings generated: {stats['embeddings_generated']}")
+    logger.info(f"Successfully scraped {len(scraped_data)} documents")
     
-    if stats.get('errors'):
-        logger.warning(f"Errors encountered: {len(stats['errors'])}")
-        for error in stats['errors']:
-            logger.warning(f"  - {error}")
+    # Chunk documents
+    all_chunks = []
+    for data in scraped_data:
+        chunks = chunker.chunk_document(data)
+        all_chunks.extend(chunks)
+        logger.info(f"Created {len(chunks)} chunks for {data.fund_name}")
     
-    return 0 if not stats.get('errors') else 1
+    logger.info(f"Total chunks created: {len(all_chunks)}")
+    
+    # Generate embeddings
+    embeddings = embedder.embed_chunks(all_chunks)
+    
+    logger.info(f"Generated {len(embeddings)} embeddings")
+    
+    # Store in vector store
+    vector_store.add_embeddings(all_chunks, embeddings)
+    
+    logger.info("Data ingestion complete!")
+    logger.info(f"Total documents: {len(scraped_data)}")
+    logger.info(f"Total chunks: {len(all_chunks)}")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    ingest_data()
