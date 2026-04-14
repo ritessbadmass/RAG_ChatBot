@@ -2,7 +2,7 @@
 import logging
 from typing import Dict, List, Optional
 
-from langchain.schema import HumanMessage, SystemMessage, AIMessage
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
 from app.config import get_settings
 from app.models.schemas import QueryType
