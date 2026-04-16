@@ -166,3 +166,15 @@ async def delete_thread(thread_id: str):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Thread {thread_id} not found"
         )
+
+
+@router.get("/threads")
+async def list_threads(limit: int = 50) -> dict:
+    """List all chat threads."""
+    thread_manager = get_thread_manager()
+    threads = thread_manager.list_threads(limit=limit)
+    
+    return {
+        "threads": threads,
+        "total": len(threads)
+    }

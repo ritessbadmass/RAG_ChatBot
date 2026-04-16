@@ -1407,17 +1407,19 @@ services:
 ### ✅ Completed
 - **Multi-AMC support**: 5 AMCs (SBI, ICICI, HDFC, Nippon, Kotak) with 25 schemes
 - **Chroma Cloud Integration**: Managed vector storage with 100+ chunks uploaded
-- **Streamlit UI**: Kuvera-inspired fintech design (ASCII-only for Python 3.14+ compatibility)
+- **Render + Vercel Deployment**: Backend on Render, frontend on Vercel
+- **Next.js Frontend**: React-based UI with Tailwind CSS
+- **Multi-Thread Chat**: Isolated chat sessions with no memory sharing between threads
+- **Thread Management**: Create, list, select, delete chat threads
 - **Daily Data Ingestion**: GitHub Actions scheduler at 9:15 AM IST
 - **Free Tier Architecture**: Groq LLM (llama-3.1-8b-instant) + BGE embeddings + Chroma Cloud
-- **Cloud Deployment**: Render configuration with UptimeRobot for 24/7 uptime
 - **RAG Pipeline**: Query classification, advisory detection, context retrieval, LLM generation
 - **Data Upload Script**: `upload_to_chroma_cloud.py` for manual cloud sync
 
 ### 🔄 In Progress
 - GitHub Actions automatic upload to Chroma Cloud (quota limits on free tier)
 - Better fund metric extraction from Kuvera pages
-- Emoji/Unicode support investigation for Python 3.14+
+- User authentication for personalized thread access
 
 ### 📋 Future Enhancements
 - Real-time document updates via webhooks
