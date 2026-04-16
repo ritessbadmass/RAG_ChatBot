@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: mutual-fund-faq-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant
+      - key: CHROMA_CLOUD_TOKEN
+        sync: false
+      - key: CHROMA_CLOUD_TENANT
+        sync: false
+      - key: CHROMA_CLOUD_DATABASE
+        sync: false
+      - key: CHROMA_COLLECTION_NAME
+        value: mutual_fund_docs
+      - key: MAX_QUERY_LENGTH
+        value: 500
+      - key: RATE_LIMIT_PER_MINUTE
+        value: 30

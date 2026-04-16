@@ -309,14 +309,16 @@ if prompt:
             classifier = QueryClassifier()
             
             # Classify query
-            classification = classifier.classify(prompt)
+            query_type, confidence, reason = classifier.classify(prompt)
             
-            if classification["is_advisory"]:
+            if query_type.value == "advisory":
                 response_text = "I cannot provide investment advice. I can only share factual information from official AMC documents."
                 source = "System"
-            elif classification["is_procedural"]:
+                source_url = "#"
+            elif query_type.value == "procedural":
                 response_text = "For account-related queries, please contact the respective AMC directly or visit their official website."
                 source = "System"
+                source_url = "#"
             else:
                 # Get answer from RAG
                 result = rag_service.process_query(
@@ -325,9 +327,7 @@ if prompt:
                 )
                 response_text = result["answer"]
                 source = result.get("source", "AMC Official Document")
-            
-            # Display bot response
-            source_url = result.get("source_url", "#") if "source_url" in locals() else "#"
+                source_url = result.get("source_url", "#")
             st.markdown(f"""
             <div class="chat-message bot-message">
                 <p class="message-text">{response_text}</p>
@@ -350,7 +350,9 @@ if prompt:
             })
             
         except Exception as e:
-            error_msg = "Sorry, I encountered an error. Please try again."
+            import traceback
+            error_msg = f"Error: {str(e)}"
+            print(f"[ERROR] Chat processing failed: {traceback.format_exc()}")
             st.markdown(f"""
             <div class="chat-message bot-message">
                 <p class="message-text" style="color: #dc2626;">[ERROR] {error_msg}</p>

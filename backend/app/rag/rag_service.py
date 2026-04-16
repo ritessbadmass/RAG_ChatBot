@@ -4,7 +4,7 @@ from typing import Dict, List, Optional
 
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
-from app.config import get_settings
+from app.config import get_settings, LAST_UPDATED_DATE, AMFI_RESOURCES, SEBI_RESOURCES
 from app.models.schemas import QueryType
 from app.rag.vector_store import VectorStoreService
 from app.rag.embedder import EmbeddingService
@@ -40,8 +40,7 @@ RESPONSE FORMAT:
 - Source: [URL from context]
 """
     
-    # Refusal message for advisory queries
-    ADVISORY_REFUSAL = """I cannot provide investment advice. I can only answer factual questions about mutual fund schemes such as:
+    ADVISORY_REFUSAL = f"""I cannot provide investment advice. I can only answer factual questions about mutual fund schemes such as:
 - Expense ratios
 - NAV and AUM
 - Exit loads
@@ -50,7 +49,7 @@ RESPONSE FORMAT:
 - Risk levels
 - Fund manager details
 
-For investment advice, please consult a SEBI-registered investment advisor."""
+For educational resources and investment guidance, please visit AMFI: {AMFI_RESOURCES} or SEBI Investor Education: {SEBI_RESOURCES}"""
     
     def __init__(
         self,
@@ -211,6 +210,9 @@ Provide a factual answer in maximum 3 sentences."""
             if len(sentences) > 3:
                 answer = '. '.join(sentences[:3]) + '.'
             
+            # Append compliance footer
+            answer = f"{answer}\n\nLast updated from sources: {LAST_UPDATED_DATE}"
+            
             return answer
             
         except Exception as e:
@@ -220,8 +222,8 @@ Provide a factual answer in maximum 3 sentences."""
     def _create_refusal_response(self) -> Dict:
         """Create refusal response for advisory queries."""
         return {
-            "answer": self.ADVISORY_REFUSAL,
-            "source_url": "https://www.amfiindia.com/investor-corner/information-center/mutual-fund-faq",
+            "answer": f"{self.ADVISORY_REFUSAL}\n\nLast updated from sources: {LAST_UPDATED_DATE}",
+            "source_url": AMFI_RESOURCES,
             "query_type": QueryType.ADVISORY.value,
             "confidence": 1.0,
             "is_refusal": True

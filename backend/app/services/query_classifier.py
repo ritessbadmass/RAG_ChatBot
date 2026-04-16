@@ -106,7 +106,7 @@ class QueryClassifier:
         if matches == 0:
             return 0.0
         elif matches == 1:
-            return 0.6
+            return 0.8
         elif matches >= 2:
             return 0.9
         return 0.0
