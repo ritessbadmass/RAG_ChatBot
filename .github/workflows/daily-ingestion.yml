@@ -15,6 +15,9 @@ jobs:
   ingest:
     name: Scrape and Build Vector DB
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     
     steps:
       - name: Checkout repository
@@ -29,7 +32,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
       
@@ -48,17 +51,16 @@ jobs:
       
       - name: Run data ingestion
         env:
-          # Use Groq for LLM (if configured) or OpenAI
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           LLM_PROVIDER: ${{ secrets.LLM_PROVIDER || 'groq' }}
           EMBEDDING_MODEL: BAAI/bge-small-en-v1.5
           EMBEDDING_DEVICE: cpu
-          # Chroma Cloud credentials (optional - for cloud deployment)
           CHROMA_CLOUD_TOKEN: ${{ secrets.CHROMA_CLOUD_TOKEN }}
           CHROMA_CLOUD_TENANT: ${{ secrets.CHROMA_CLOUD_TENANT }}
           CHROMA_CLOUD_DATABASE: ${{ secrets.CHROMA_CLOUD_DATABASE }}
           CHROMA_COLLECTION_NAME: mutual_fund_docs
+          PYTHONPATH: .
         run: |
           echo "Starting data ingestion..."
           python scripts/ingest_data.py
@@ -79,21 +81,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vector-store-${{ github.run_id }}
-          path: data/vector_store/
-          retention-days: 90
-          compression-level: 9
+          path: backend/data/vector_store/
       
       - name: Upload processed data as artifact
         uses: actions/upload-artifact@v4
         with:
           name: processed-data-${{ github.run_id }}
-          path: data/processed/
-          retention-days: 30
+          path: backend/data/processed/
       
       - name: Summary
         run: |
           echo "## Ingestion Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Vector store uploaded as artifact: \`vector-store-${{ github.run_id }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Processed data uploaded as artifact: \`processed-data-${{ github.run_id }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Vector store path: \`backend/data/vector_store/\`" >> $GITHUB_STEP_SUMMARY
           echo "- Retention: 90 days" >> $GITHUB_STEP_SUMMARY

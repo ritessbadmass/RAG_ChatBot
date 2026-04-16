@@ -1,8 +1,8 @@
 """Unit tests for query classifier."""
 import pytest
 
-from app.models.schemas import QueryType
-from app.services.query_classifier import QueryClassifier
+from mf_assistant.models.schemas import QueryType
+from mf_assistant.services.query_classifier import QueryClassifier
 
 
 class TestQueryClassifier:
@@ -25,7 +25,7 @@ class TestQueryClassifier:
         """Test that advisory queries are correctly classified."""
         for query in sample_advisory_queries:
             query_type, confidence, reason = classifier.classify(query)
-            assert query_type == QueryType.ADVISORY, f"Failed for: {query}"
+            assert query_type == QueryType.ADVISORY, f"Failed for: {query}. Type: {type(query_type)} vs Expected: {type(QueryType.ADVISORY)}. Value: {query_type} vs Expected: {QueryType.ADVISORY}"
             assert confidence > 0.6
             print(f"✓ {query[:50]}... -> {query_type.value} ({confidence:.2f})")
     

@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 def check_environment():
     """Check if environment is properly configured."""
-    from app.config import get_settings
+    from mf_assistant.config import get_settings
     
     settings = get_settings()
     
@@ -58,13 +58,13 @@ def run_ingestion():
 def run_server():
     """Run the FastAPI server."""
     import uvicorn
-    from app.config import get_settings
+    from mf_assistant.config import get_settings
     
     settings = get_settings()
     
     logger.info(f"Starting server on {settings.HOST}:{settings.PORT}")
     uvicorn.run(
-        "app.main:app",
+        "mf_assistant.main:app",
         host=settings.HOST,
         port=settings.PORT,
         reload=settings.DEBUG

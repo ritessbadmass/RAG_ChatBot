@@ -3,8 +3,8 @@ import logging
 import re
 from typing import Dict, List, Optional, Tuple
 
-from app.config import ADVISORY_PATTERNS, RELEVANT_FIELDS
-from app.models.schemas import QueryType
+from mf_assistant.config import ADVISORY_PATTERNS, RELEVANT_FIELDS
+from mf_assistant.models.schemas import QueryType
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +125,7 @@ class QueryClassifier:
         # Check for factual patterns
         for pattern in self.factual_patterns:
             if pattern.search(query):
-                score += 0.3
+                score += 0.5
         
         # Check for relevant field keywords
         for field, keywords in RELEVANT_FIELDS.items():

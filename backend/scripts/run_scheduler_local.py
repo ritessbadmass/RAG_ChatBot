@@ -111,8 +111,8 @@ def phase_2_scraping():
     """Phase 2: Scrape mutual fund URLs."""
     logger.info("Starting scraping phase...")
     
-    from app.config import MUTUAL_FUND_URLS
-    from app.services.scraper import MutualFundScraper
+    from mf_assistant.config import MUTUAL_FUND_URLS
+    from mf_assistant.services.scraper import MutualFundScraper
     
     scraper = MutualFundScraper()
     
@@ -175,7 +175,7 @@ def phase_3_chunking(scraped_data):
     """Phase 3: Chunk documents."""
     logger.info("Starting chunking phase...")
     
-    from app.rag.chunker import DocumentChunker
+    from mf_assistant.rag.chunker import DocumentChunker
     
     chunker = DocumentChunker()
     all_chunks = []
@@ -200,8 +200,8 @@ def phase_4_embedding(chunks):
     """Phase 4: Generate embeddings."""
     logger.info("Starting embedding phase...")
     
-    from app.rag.embedder import EmbeddingService
-    from app.config import get_settings
+    from mf_assistant.rag.embedder import EmbeddingService
+    from mf_assistant.config import get_settings
     
     settings = get_settings()
     embedder = EmbeddingService()
@@ -230,7 +230,7 @@ def phase_5_vector_storage(chunks, embeddings):
     """Phase 5: Store in vector store."""
     logger.info("Starting vector storage phase...")
     
-    from app.rag.vector_store import VectorStoreService
+    from mf_assistant.rag.vector_store import VectorStoreService
     
     vector_store = VectorStoreService()
     

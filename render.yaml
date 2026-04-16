@@ -10,7 +10,7 @@
 #    - Root Directory: backend
 #    - Runtime: Python 3
 #    - Build Command: pip install -r requirements.txt
-#    - Start Command: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+#    - Start Command: uvicorn mf_assistant.main:app --host 0.0.0.0 --port $PORT
 #
 # 5. Set Environment Variables in Render Dashboard:
 #    - GROQ_API_KEY (required)
@@ -29,7 +29,7 @@ services:
     runtime: python
     rootDir: backend
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn mf_assistant.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /admin/health
     envVars:
       - key: PYTHON_VERSION

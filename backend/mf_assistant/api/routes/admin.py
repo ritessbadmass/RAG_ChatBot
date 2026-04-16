@@ -3,12 +3,12 @@ import logging
 
 from fastapi import APIRouter, HTTPException, status
 
-from app.config import get_settings
-from app.models.schemas import HealthResponse, StatsResponse
-from app.rag.pipeline import build_urls_config, get_pipeline
-from app.rag.rag_service import get_rag_service
-from app.rag.vector_store import VectorStoreService
-from app.services.thread_manager import get_thread_manager
+from mf_assistant.config import get_settings
+from mf_assistant.models.schemas import HealthResponse, StatsResponse
+from mf_assistant.rag.pipeline import build_urls_config, get_pipeline
+from mf_assistant.rag.rag_service import get_rag_service
+from mf_assistant.rag.vector_store import VectorStoreService
+from mf_assistant.services.thread_manager import get_thread_manager
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin", tags=["admin"])

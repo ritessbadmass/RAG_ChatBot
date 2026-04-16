@@ -4,11 +4,11 @@ from typing import Dict, List, Optional
 
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
-from app.config import get_settings, LAST_UPDATED_DATE, AMFI_RESOURCES, SEBI_RESOURCES
-from app.models.schemas import QueryType
-from app.rag.vector_store import VectorStoreService
-from app.rag.embedder import EmbeddingService
-from app.services.query_classifier import QueryClassifier
+from mf_assistant.config import get_settings, LAST_UPDATED_DATE, AMFI_RESOURCES, SEBI_RESOURCES
+from mf_assistant.models.schemas import QueryType
+from mf_assistant.rag.vector_store import VectorStoreService
+from mf_assistant.rag.embedder import EmbeddingService
+from mf_assistant.services.query_classifier import QueryClassifier
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
