@@ -17,8 +17,8 @@ groq==0.4.2     # Fast LLM inference
 langchain-groq==0.1.0  # LangChain integration for Groq
 
 # Local Embeddings (Free)
+# Note: torch is installed as a dependency of sentence-transformers
 sentence-transformers==2.3.1
-torch>=2.0.0,<2.3.0
 
 # Database
 sqlalchemy==2.0.25
