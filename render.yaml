@@ -1,24 +1,52 @@
+# Render Configuration for Mutual Fund FAQ Assistant
+# This file configures the FastAPI backend deployment
+# 
+# DEPLOYMENT STEPS:
+# 1. Go to https://dashboard.render.com/
+# 2. Click "New +" → "Web Service"
+# 3. Connect your GitHub repository
+# 4. Configure:
+#    - Name: mutual-fund-faq-api
+#    - Root Directory: backend
+#    - Runtime: Python 3
+#    - Build Command: pip install -r requirements.txt
+#    - Start Command: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+#
+# 5. Set Environment Variables in Render Dashboard:
+#    - GROQ_API_KEY (required)
+#    - CHROMA_CLOUD_TOKEN (required)
+#    - CHROMA_CLOUD_TENANT (required)
+#    - CHROMA_CLOUD_DATABASE (required)
+#    - FRONTEND_URL (set after Vercel deployment)
+#
+# 6. Click "Create Web Service"
+#
+# For detailed instructions, see DEPLOYMENT.md
+
 services:
   - type: web
-    name: mutual-fund-faq-assistant
+    name: mutual-fund-faq-api
     runtime: python
+    rootDir: backend
     buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run streamlit_app.py --server.port=$PORT --server.address=0.0.0.0
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /admin/health
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
       - key: LLM_PROVIDER
         value: groq
-      - key: GROQ_API_KEY
-        sync: false
       - key: GROQ_MODEL
         value: llama-3.1-8b-instant
-      - key: CHROMA_CLOUD_TOKEN
-        sync: false
-      - key: CHROMA_CLOUD_TENANT
-        sync: false
-      - key: CHROMA_CLOUD_DATABASE
-        sync: false
       - key: CHROMA_COLLECTION_NAME
         value: mutual_fund_docs
-    healthCheckPath: /_stcore/health
+      - key: MAX_QUERY_LENGTH
+        value: 500
+      - key: RATE_LIMIT_PER_MINUTE
+        value: 30
+      # Secret environment variables (set in Render dashboard):
+      # - GROQ_API_KEY
+      # - CHROMA_CLOUD_TOKEN
+      # - CHROMA_CLOUD_TENANT
+      # - CHROMA_CLOUD_DATABASE
+      # - FRONTEND_URL (set after frontend deployment)
