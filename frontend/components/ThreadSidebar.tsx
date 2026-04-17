@@ -16,6 +16,7 @@ export default function ThreadSidebar({
   onNewChat,
   onThreadDelete,
 }: ThreadSidebarProps) {
+  const [threads, setThreads] = useState<Thread[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isIngesting, setIsIngesting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
