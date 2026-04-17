@@ -2,7 +2,7 @@
 import re
 from typing import Optional
 
-from mf_assistant.config import get_settings
+from app.config import get_settings
 
 settings = get_settings()
 
@@ -54,7 +54,7 @@ def is_advisory_query(query: str) -> bool:
     Check if query is advisory in nature.
     Returns True if advisory patterns are detected.
     """
-    from mf_assistant.config import ADVISORY_PATTERNS
+    from app.config import ADVISORY_PATTERNS
     
     query_lower = query.lower()
     

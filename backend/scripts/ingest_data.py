@@ -6,11 +6,11 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from mf_assistant.config import MUTUAL_FUND_URLS
-from mf_assistant.services.scraper import MutualFundScraper
-from mf_assistant.rag.chunker import DocumentChunker
-from mf_assistant.rag.embedder import EmbeddingService
-from mf_assistant.rag.vector_store import VectorStoreService
+from app.config import MUTUAL_FUND_URLS
+from app.services.scraper import MutualFundScraper
+from app.rag.chunker import DocumentChunker
+from app.rag.embedder import EmbeddingService
+from app.rag.vector_store import VectorStoreService
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

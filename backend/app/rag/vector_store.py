@@ -6,9 +6,9 @@ from typing import Dict, List, Optional, Any
 import chromadb
 from chromadb.config import Settings as ChromaSettings
 
-from mf_assistant.config import get_settings
-from mf_assistant.models.schemas import Chunk
-from mf_assistant.core.exceptions import VectorStoreException
+from app.config import get_settings
+from app.models.schemas import Chunk
+from app.core.exceptions import VectorStoreException
 
 logger = logging.getLogger(__name__)
 settings = get_settings()

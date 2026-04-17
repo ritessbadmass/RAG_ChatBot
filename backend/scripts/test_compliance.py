@@ -4,8 +4,8 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from mf_assistant.rag.rag_service import RAGService
-from mf_assistant.models.schemas import QueryType
+from app.rag.rag_service import RAGService
+from app.models.schemas import QueryType
 
 def test_compliance():
     """Verify chatbot compliance logic."""

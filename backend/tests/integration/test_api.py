@@ -2,7 +2,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from mf_assistant.main import mf_assistant
+from app.main import app
 
 
 class TestHealthEndpoint:

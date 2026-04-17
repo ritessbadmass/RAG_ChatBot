@@ -5,8 +5,8 @@ from pathlib import Path
 # Add backend to path
 sys.path.insert(0, str(Path(os.getcwd())))
 
-from mf_assistant.services.query_classifier import QueryClassifier
-from mf_assistant.models.schemas import QueryType
+from app.services.query_classifier import QueryClassifier
+from app.models.schemas import QueryType
 
 def debug():
     classifier = QueryClassifier()

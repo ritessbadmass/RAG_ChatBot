@@ -7,8 +7,8 @@ from typing import Dict, List, Optional
 
 from sqlalchemy.orm import Session
 
-from mf_assistant.models.database import ThreadModel, MessageModel, get_db
-from mf_assistant.models.schemas import Message, MessageRole, Thread
+from app.models.database import ThreadModel, MessageModel, get_db
+from app.models.schemas import Message, MessageRole, Thread
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class ThreadManager:
         if self.db:
             return self.db
         # Create new session
-        from mf_assistant.models.database import SessionLocal
+        from app.models.database import SessionLocal
         return SessionLocal()
     
     def create_thread(self) -> Thread:

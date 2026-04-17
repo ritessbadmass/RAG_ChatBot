@@ -5,9 +5,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from mf_assistant.api.routes import chat, admin
-from mf_assistant.config import get_settings
-from mf_assistant.models.database import create_tables
+from app.api.routes import chat, admin
+from app.config import get_settings
+from app.models.database import create_tables
 
 # Configure logging
 logging.basicConfig(
@@ -89,7 +89,7 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
-        "mf_assistant.main:app",
+        "app.main:app",
         host=settings.HOST,
         port=settings.PORT,
         reload=settings.DEBUG

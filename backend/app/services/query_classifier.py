@@ -3,8 +3,8 @@ import logging
 import re
 from typing import Dict, List, Optional, Tuple
 
-from mf_assistant.config import ADVISORY_PATTERNS, RELEVANT_FIELDS
-from mf_assistant.models.schemas import QueryType
+from app.config import ADVISORY_PATTERNS, RELEVANT_FIELDS
+from app.models.schemas import QueryType
 
 logger = logging.getLogger(__name__)
 

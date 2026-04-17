@@ -4,8 +4,8 @@ from typing import List
 
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
-from mf_assistant.config import get_settings
-from mf_assistant.models.schemas import Chunk
+from app.config import get_settings
+from app.models.schemas import Chunk
 
 logger = logging.getLogger(__name__)
 settings = get_settings()

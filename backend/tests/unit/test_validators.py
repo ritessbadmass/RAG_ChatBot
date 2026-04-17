@@ -1,13 +1,13 @@
 """Unit tests for validators."""
 import pytest
 
-from mf_assistant.utils.validators import (
+from app.utils.validators import (
     detect_pii,
     validate_query_length,
     is_advisory_query,
     sanitize_input,
 )
-from mf_assistant.config import get_settings
+from app.config import get_settings
 
 
 class TestPIIDetection:

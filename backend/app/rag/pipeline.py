@@ -4,12 +4,12 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from mf_assistant.config import MUTUAL_FUND_URLS, get_settings
-from mf_assistant.models.schemas import ExtractedData, Chunk
-from mf_assistant.services.scraper import MutualFundScraper, ScrapingPipeline
-from mf_assistant.rag.chunker import DocumentChunker
-from mf_assistant.rag.embedder import EmbeddingService
-from mf_assistant.rag.vector_store import VectorStoreService
+from app.config import MUTUAL_FUND_URLS, get_settings
+from app.models.schemas import ExtractedData, Chunk
+from app.services.scraper import MutualFundScraper, ScrapingPipeline
+from app.rag.chunker import DocumentChunker
+from app.rag.embedder import EmbeddingService
+from app.rag.vector_store import VectorStoreService
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
