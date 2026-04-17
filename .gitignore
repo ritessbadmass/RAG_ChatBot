@@ -55,8 +55,13 @@ Thumbs.db
 
 # Model cache
 .cache/
-models/
 ~/.cache/torch/
+
+# ML model files (but not Python app/models package)
+/models/*.pt
+/models/*.pth
+/models/*.bin
+/models/*.safetensors
 
 # pytest
 .pytest_cache/
