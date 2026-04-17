@@ -28,11 +28,16 @@ class VectorStoreService:
         self.using_cloud = bool(settings.CHROMA_CLOUD_TOKEN and settings.CHROMA_CLOUD_TENANT and settings.CHROMA_CLOUD_DATABASE)
         
         if self.using_cloud:
-            self._init_cloud_client()
+            try:
+                self._init_cloud_client()
+                logger.info(f"Initialized Cloud vector store: {self.collection_name}")
+            except Exception as e:
+                logger.error(f"Failed to initialize Chroma Cloud: {e}. Falling back to local store.")
+                self.using_cloud = False
+                self._init_local_client()
         else:
             self._init_local_client()
-        
-        logger.info(f"Initialized vector store: {self.collection_name} ({'cloud' if self.using_cloud else 'local'})")
+            logger.info(f"Initialized local vector store: {self.collection_name}")
     
     def _init_local_client(self):
         """Initialize local ChromaDB client."""
