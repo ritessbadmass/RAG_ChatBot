@@ -7,8 +7,10 @@ import SuggestedQuestions from '@/components/SuggestedQuestions';
 import ThreadSidebar from '@/components/ThreadSidebar';
 import { sendMessage, createThread, getThreadHistory, ChatMessage as ChatMessageType } from '@/lib/api';
 
+type UIChatMessage = ChatMessageType & { source?: string; sourceUrl?: string; };
+
 export default function Home() {
-  const [messages, setMessages] = useState<ChatMessageType[]>([]);
+  const [messages, setMessages] = useState<UIChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [threadId, setThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -60,7 +62,7 @@ export default function Home() {
   const handleSendMessage = async (content: string) => {
     if (!threadId) return;
 
-    const userMessage: ChatMessageType = { role: 'user', content };
+    const userMessage: UIChatMessage = { role: 'user', content };
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
@@ -72,7 +74,7 @@ export default function Home() {
 
       const response = await sendMessage(content, threadId, history);
 
-      const assistantMessage: ChatMessageType = {
+      const assistantMessage: UIChatMessage = {
         role: 'assistant',
         content: response.answer,
       };
@@ -86,7 +88,7 @@ export default function Home() {
         },
       ]);
     } catch (error) {
-      const errorMessage: ChatMessageType = {
+      const errorMessage: UIChatMessage = {
         role: 'assistant',
         content: error instanceof Error ? error.message : 'Sorry, I encountered an error. Please try again.',
       };
