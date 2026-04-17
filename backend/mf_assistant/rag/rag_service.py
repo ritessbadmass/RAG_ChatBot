@@ -68,26 +68,36 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
     
     def _initialize_llm(self):
         """Initialize LLM based on provider setting."""
-        if settings.LLM_PROVIDER == "groq":
-            from langchain_groq import ChatGroq
-            
-            logger.info(f"Using Groq with model: {settings.GROQ_MODEL}")
-            return ChatGroq(
-                model=settings.GROQ_MODEL,
-                api_key=settings.GROQ_API_KEY,
-                temperature=0.1,
-                max_tokens=200
-            )
-        else:
-            from langchain_openai import ChatOpenAI
-            
-            logger.info(f"Using OpenAI with model: {settings.OPENAI_MODEL}")
-            return ChatOpenAI(
-                model=settings.OPENAI_MODEL,
-                api_key=settings.OPENAI_API_KEY,
-                temperature=0.1,
-                max_tokens=200
-            )
+        try:
+            if settings.LLM_PROVIDER == "groq":
+                if not settings.GROQ_API_KEY:
+                    logger.warning("GROQ_API_KEY is not set")
+                    return None
+                    
+                from langchain_groq import ChatGroq
+                logger.info(f"Using Groq with model: {settings.GROQ_MODEL}")
+                return ChatGroq(
+                    model=settings.GROQ_MODEL,
+                    api_key=settings.GROQ_API_KEY,
+                    temperature=0.1,
+                    max_tokens=200
+                )
+            else:
+                if not settings.OPENAI_API_KEY:
+                    logger.warning("OPENAI_API_KEY is not set")
+                    return None
+
+                from langchain_openai import ChatOpenAI
+                logger.info(f"Using OpenAI with model: {settings.OPENAI_MODEL}")
+                return ChatOpenAI(
+                    model=settings.OPENAI_MODEL,
+                    api_key=settings.OPENAI_API_KEY,
+                    temperature=0.1,
+                    max_tokens=200
+                )
+        except Exception as e:
+            logger.error(f"Failed to initialize LLM: {e}")
+            return None
     
     def process_query(
         self,
@@ -130,6 +140,15 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
             }
         
         # Step 5: Generate response with LLM
+        if not self.llm:
+            return {
+                "answer": "Backend Error: LLM API key not configured. Please add GROQ_API_KEY (or OPENAI_API_KEY) to environment variables.",
+                "source_url": "https://dashboard.render.com",
+                "query_type": query_type.value,
+                "confidence": confidence,
+                "sources": sources
+            }
+
         answer = self._generate_response(query, context, thread_history)
         
         # Step 6: Format final response

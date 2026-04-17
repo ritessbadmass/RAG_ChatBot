@@ -108,10 +108,17 @@ async def chat(
         return RefusalResponse(thread_id=thread_id)
     
     except Exception as e:
-        logger.error(f"Error processing query: {e}")
+        import traceback
+        error_trace = traceback.format_exc()
+        logger.error(f"Error processing query: {e}\n{error_trace}")
+        
+        error_detail = str(e)
+        if "api_key" in error_detail.lower():
+            error_detail = "LLM API Key missing or invalid. Please check your environment variables."
+            
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An error occurred processing your request"
+            detail=f"Backend Error: {error_detail}"
         )
 
 

@@ -40,12 +40,12 @@ jobs:
     
     - name: Lint with flake8
       run: |
-        flake8 app tests --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 app tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 mf_assistant tests --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 mf_assistant tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
     - name: Check formatting with black
       run: |
-        black --check app tests || true
+        black --check mf_assistant tests || true
     
     - name: Run unit tests
       env:
@@ -55,9 +55,9 @@ jobs:
         PYTHONPATH: ${{ github.workspace }}/backend
       run: |
         python -c "import sys; print('Python path:', sys.path)"
-        python -c "import app; print('app imported successfully')"
-        python -c "from app.models import database; print('app.models imported successfully')"
-        pytest tests/unit -v --cov=app --cov-report=xml || echo "Tests failed but continuing"
+        python -c "import mf_assistant; print('mf_assistant imported successfully')"
+        python -c "from mf_assistant.models import database; print('mf_assistant.models imported successfully')"
+        pytest tests/unit -v --cov=mf_assistant --cov-report=xml || echo "Tests failed but continuing"
     
     - name: Upload coverage
       uses: codecov/codecov-action@v3
