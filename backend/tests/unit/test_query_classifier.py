@@ -1,8 +1,8 @@
 """Unit tests for query classifier."""
 import pytest
 
-from app.models.schemas import QueryType
-from app.services.query_classifier import QueryClassifier
+from mf_assistant.models.schemas import QueryType
+from mf_assistant.services.query_classifier import QueryClassifier
 
 
 class TestQueryClassifier:

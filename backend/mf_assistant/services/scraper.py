@@ -13,9 +13,9 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
-from app.config import SCRAPER_CONFIG, RELEVANT_FIELDS, get_settings
-from app.core.exceptions import ScrapingException
-from app.models.schemas import ExtractedData
+from mf_assistant.config import SCRAPER_CONFIG, RELEVANT_FIELDS, get_settings
+from mf_assistant.core.exceptions import ScrapingException
+from mf_assistant.models.schemas import ExtractedData
 
 logger = logging.getLogger(__name__)
 settings = get_settings()

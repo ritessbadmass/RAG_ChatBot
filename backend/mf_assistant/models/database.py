@@ -13,7 +13,7 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker, Session
 
-from app.config import get_settings
+from mf_assistant.config import get_settings
 
 Base = declarative_base()
 

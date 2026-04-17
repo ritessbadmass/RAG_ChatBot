@@ -1,8 +1,8 @@
 """Compliance tests per problem statement requirements."""
 import pytest
 
-from app.services.query_classifier import QueryClassifier
-from app.utils.validators import detect_pii, validate_query_length
+from mf_assistant.services.query_classifier import QueryClassifier
+from mf_assistant.utils.validators import detect_pii, validate_query_length
 
 
 class TestProblemStatementCompliance:
@@ -41,7 +41,7 @@ class TestProblemStatementCompliance:
     # Requirement 2: Max 3 sentences (tested in response formatting)
     def test_answer_length_constraint(self):
         """Test that answers are limited to 3 sentences."""
-        from app.utils.formatters import truncate_to_three_sentences
+        from mf_assistant.utils.formatters import truncate_to_three_sentences
         
         long_answer = "This is sentence one. This is sentence two. This is sentence three. This is sentence four."
         truncated = truncate_to_three_sentences(long_answer)
@@ -113,7 +113,7 @@ class TestResponseFormatCompliance:
     
     def test_response_has_required_fields(self):
         """Test that response has all required fields."""
-        from app.models.schemas import ChatResponse
+        from mf_assistant.models.schemas import ChatResponse
         from datetime import datetime
         
         response = ChatResponse(

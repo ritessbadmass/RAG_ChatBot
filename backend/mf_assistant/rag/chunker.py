@@ -5,7 +5,7 @@ import re
 from typing import Dict, List, Optional
 from uuid import uuid4
 
-from app.models.schemas import Chunk, ExtractedData
+from mf_assistant.models.schemas import Chunk, ExtractedData
 
 logger = logging.getLogger(__name__)
 

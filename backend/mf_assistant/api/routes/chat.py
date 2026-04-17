@@ -5,19 +5,19 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.config import get_settings
-from app.core.exceptions import AdvisoryQueryException, PIIDetectedException
-from app.models.database import get_db
-from app.models.schemas import (
+from mf_assistant.config import get_settings
+from mf_assistant.core.exceptions import AdvisoryQueryException, PIIDetectedException
+from mf_assistant.models.database import get_db
+from mf_assistant.models.schemas import (
     ChatRequest,
     ChatResponse,
     MessageRole,
     RefusalResponse,
 )
-from app.rag.rag_service import get_rag_service
-from app.services.query_classifier import get_classifier
-from app.services.thread_manager import get_thread_manager
-from app.utils.validators import detect_pii, validate_query_length
+from mf_assistant.rag.rag_service import get_rag_service
+from mf_assistant.services.query_classifier import get_classifier
+from mf_assistant.services.thread_manager import get_thread_manager
+from mf_assistant.utils.validators import detect_pii, validate_query_length
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/chat", tags=["chat"])

@@ -1,5 +1,5 @@
 """Models package."""
-from app.models.schemas import (
+from mf_assistant.models.schemas import (
     ChatRequest,
     ChatResponse,
     Message,

@@ -5,9 +5,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import chat, admin
-from app.config import get_settings
-from app.models.database import create_tables
+from mf_assistant.api.routes import chat, admin
+from mf_assistant.config import get_settings
+from mf_assistant.models.database import create_tables
 
 # Configure logging
 logging.basicConfig(
@@ -46,24 +46,9 @@ app = FastAPI(
 # CORS middleware - configure for Vercel frontend
 import os
 
-ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Local development
-    "http://127.0.0.1:3000",
-]
-
-# Add Vercel deployment URL from environment variable
-VERCEL_URL = os.getenv("VERCEL_URL")
-if VERCEL_URL:
-    ALLOWED_ORIGINS.append(f"https://{VERCEL_URL}")
-
-# Add custom frontend URL if provided
-FRONTEND_URL = os.getenv("FRONTEND_URL")
-if FRONTEND_URL:
-    ALLOWED_ORIGINS.append(FRONTEND_URL)
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -89,7 +74,7 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
-        "app.main:app",
+        "mf_assistant.main:app",
         host=settings.HOST,
         port=settings.PORT,
         reload=settings.DEBUG
