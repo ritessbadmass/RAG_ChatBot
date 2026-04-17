@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Thread, listThreads, deleteThread } from '@/lib/api';
+import { Thread, listThreads, deleteThread, ingestData } from '@/lib/api';
 
 interface ThreadSidebarProps {
   currentThreadId: string | null;
@@ -16,8 +16,8 @@ export default function ThreadSidebar({
   onNewChat,
   onThreadDelete,
 }: ThreadSidebarProps) {
-  const [threads, setThreads] = useState<Thread[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isIngesting, setIsIngesting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -57,6 +57,20 @@ export default function ThreadSidebar({
       hour: '2-digit',
       minute: '2-digit',
     });
+  };
+
+  const handleIngest = async () => {
+    if (isIngesting) return;
+    setIsIngesting(true);
+    try {
+      await ingestData();
+      alert('Knowledge base update triggered successfully! It may take a minute to process.');
+    } catch (error) {
+      console.error('Failed to ingest data:', error);
+      alert('Failed to trigger update. Please check if backend is running.');
+    } finally {
+      setIsIngesting(false);
+    }
   };
 
   return (
@@ -137,12 +151,26 @@ export default function ThreadSidebar({
           </div>
 
           {/* Footer */}
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-gray-200 space-y-2">
+            <button
+              onClick={handleIngest}
+              disabled={isIngesting}
+              className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors ${
+                isIngesting 
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                  : 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
+              }`}
+            >
+              <svg className={`w-4 h-4 ${isIngesting ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              {isIngesting ? 'Syncing...' : 'Sync AMC Data'}
+            </button>
             <button
               onClick={loadThreads}
-              className="w-full text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              className="w-full text-xs text-gray-500 hover:text-gray-900 transition-colors py-1"
             >
-              Refresh list
+              Refresh chat list
             </button>
           </div>
         </div>

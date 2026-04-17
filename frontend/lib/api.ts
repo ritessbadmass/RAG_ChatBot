@@ -117,13 +117,18 @@ export async function deleteThread(threadId: string): Promise<void> {
   }
 }
 
-export async function healthCheck(): Promise<boolean> {
-  try {
-    const response = await fetch(`${API_URL}/admin/health`, {
-      method: 'GET',
-    });
-    return response.ok;
-  } catch {
-    return false;
+export async function ingestData(): Promise<any> {
+  const response = await fetch(`${API_URL}/admin/ingest`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to trigger ingestion');
   }
+
+  return response.json();
 }
