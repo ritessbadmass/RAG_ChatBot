@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Thread, listThreads, deleteThread, ingestData } from '@/lib/api';
+import { Thread, listThreads, deleteThread, ingestData, getIngestionStatus } from '@/lib/api';
 
 interface ThreadSidebarProps {
   currentThreadId: string | null;
@@ -60,17 +60,39 @@ export default function ThreadSidebar({
     });
   };
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isIngesting) {
+      interval = setInterval(async () => {
+        try {
+          const status = await getIngestionStatus();
+          if (!status.is_running) {
+            setIsIngesting(false);
+            if (status.error) {
+              alert(`Sync failed: ${status.error}`);
+            } else {
+              alert('Knowledge base update completed successfully!');
+            }
+          }
+        } catch (error) {
+          console.error('Failed to poll status:', error);
+        }
+      }, 5000);
+    }
+    return () => clearInterval(interval);
+  }, [isIngesting]);
+
   const handleIngest = async () => {
     if (isIngesting) return;
-    setIsIngesting(true);
     try {
-      await ingestData();
-      alert('Knowledge base update triggered successfully! It may take a minute to process.');
+      const response = await ingestData();
+      if (response.status === 'started' || response.status === 'already_running') {
+        setIsIngesting(true);
+        alert('Update started in background. The assistant will be ready once the "Syncing" state disappears.');
+      }
     } catch (error) {
       console.error('Failed to ingest data:', error);
       alert('Failed to trigger update. Please check if backend is running.');
-    } finally {
-      setIsIngesting(false);
     }
   };
 

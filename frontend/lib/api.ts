@@ -132,3 +132,19 @@ export async function ingestData(): Promise<any> {
 
   return response.json();
 }
+
+export async function getIngestionStatus(): Promise<{ is_running: boolean; error: string | null; last_run: string | null }> {
+  const response = await fetch(`${API_URL}/admin/ingest/status`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to get ingestion status');
+  }
+
+  return response.json();
+}
