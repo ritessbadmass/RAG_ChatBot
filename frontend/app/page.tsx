@@ -88,6 +88,29 @@ export default function Home() {
         },
       ]);
     } catch (error) {
+      // If thread is not found, it might have been reset on the server
+      if (error instanceof Error && error.message.includes('not found')) {
+        console.warn('Thread not found, creating a new session...');
+        try {
+          const newThread = await createThread();
+          setThreadId(newThread.thread_id);
+          // Retry sending with new thread ID
+          const response = await sendMessage(content, newThread.thread_id, []);
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: response.answer,
+              source: response.source,
+              sourceUrl: response.source_url,
+            },
+          ]);
+          return;
+        } catch (retryError) {
+          console.error('Retry failed:', retryError);
+        }
+      }
+
       const errorMessage: UIChatMessage = {
         role: 'assistant',
         content: error instanceof Error ? error.message : 'Sorry, I encountered an error. Please try again.',

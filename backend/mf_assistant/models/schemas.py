@@ -58,10 +58,11 @@ class ChatResponse(BaseModel):
     @field_validator('answer')
     @classmethod
     def validate_answer_length(cls, v: str) -> str:
-        """Ensure answer is max 3 sentences."""
+        """Ensure answer is max 3 sentences by truncating if necessary."""
         sentences = [s.strip() for s in v.split('.') if s.strip()]
         if len(sentences) > 3:
-            raise ValueError("Answer must be maximum 3 sentences")
+            # Join first 3 sentences and add a period
+            return '. '.join(sentences[:3]) + '.'
         return v
 
 
