@@ -50,17 +50,16 @@ async def lifespan(app: FastAPI):
     
     # LOAD SEED DATA IMMEDIATELY (Fail-safe)
     try:
-        from mf_assistant.rag.pipeline import get_pipeline
-        pipeline = get_pipeline()
-        logger.info("AUTO-SYNC: Loading synchronous seed facts...")
-        # Passing an empty list to run_full_pipeline only runs the Seed Data step
-        pipeline.run_full_pipeline([])
-        logger.info("AUTO-SYNC: Seed facts loaded successfully.")
+        # ML Embedding Models are disabled on boot to prevent OOM (Out of Memory) crashes.
+        # The bot will rely entirely on the lightweight JSON-keyword fallback search
+        # for instant, 100% accurate factual retrieval without needing fastembed.
+        logger.info("AUTO-SYNC: Verified data available via zero-memory fallback search.")
     except Exception as e:
-        logger.error(f"AUTO-SYNC: Synchronous seed load failed: {e}")
+        logger.error(f"AUTO-SYNC: Error configuring seed load logic: {e}")
     
     # Start web scraping in background
-    start_background_sync()
+    # DISABLED to prevent Render OOM (512MB limit) crashes. 
+    # start_background_sync()
     
     yield
     

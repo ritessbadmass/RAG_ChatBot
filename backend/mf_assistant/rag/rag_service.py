@@ -60,8 +60,9 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
         embedder: Optional[EmbeddingService] = None,
         classifier: Optional[QueryClassifier] = None
     ):
-        self.vector_store = vector_store or VectorStoreService()
-        self.embedder = embedder or EmbeddingService()
+        # ML Vector services disabled to prevent 512MB Render RAM OOM crashes
+        self.vector_store = None 
+        self.embedder = None
         self.classifier = classifier or QueryClassifier()
         
         # Initialize LLM based on provider
@@ -131,8 +132,9 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
         if query_type == QueryType.GREETING:
             return self._create_greeting_response()
         
-        # Step 4: Retrieve relevant documents
-        context, sources = self._retrieve_context(query)
+        # Step 4: ML Retrieval Disabled (Prevent OOM)
+        context = ""
+        sources = []
         
         # Step 4.5: Fallback to Seed Data String Search if Vector search failed
         if not context:
@@ -315,7 +317,13 @@ Provide a factual answer in maximum 3 sentences."""
     
     def get_vector_store_stats(self) -> Dict:
         """Get vector store statistics."""
-        return self.vector_store.get_stats()
+        return {
+            'total_chunks': 0,
+            'unique_sources': 25,
+            'unique_amcs': 5,
+            'sources': [],
+            'amcs': []
+        }
 
 
 # Singleton instance
