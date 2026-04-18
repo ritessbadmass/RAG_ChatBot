@@ -1,97 +1,84 @@
-name: Daily Data Ingestion
+name: Daily Seed Data Refresh
 
 on:
   schedule:
     # 9:15 AM IST = 3:45 AM UTC
     - cron: '45 3 * * *'
-  
-  # Allow manual trigger
+
+  # Allow manual trigger from GitHub UI
   workflow_dispatch:
 
-env:
-  PYTHON_VERSION: '3.11'
-
 jobs:
-  ingest:
-    name: Scrape and Build Vector DB
+  refresh:
+    name: Scrape & Refresh seed_data.json
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-    
+
+    permissions:
+      contents: write   # needed to push the updated seed file back
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
-      - name: Set up Python
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      
+          python-version: '3.11'
+
       - name: Cache pip dependencies
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements.txt') }}
+          key: ${{ runner.os }}-pip-seed-${{ hashFiles('backend/requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
-      
+            ${{ runner.os }}-pip-seed-
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      
-      - name: Cache BGE model
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/torch/sentence_transformers
-          key: bge-model-${{ runner.os }}
-          restore-keys: |
-            bge-model-
-      
-      - name: Run data ingestion
-        env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          LLM_PROVIDER: ${{ secrets.LLM_PROVIDER || 'groq' }}
-          EMBEDDING_MODEL: BAAI/bge-small-en-v1.5
-          EMBEDDING_DEVICE: cpu
-          CHROMA_CLOUD_TOKEN: ${{ secrets.CHROMA_CLOUD_TOKEN }}
-          CHROMA_CLOUD_TENANT: ${{ secrets.CHROMA_CLOUD_TENANT }}
-          CHROMA_CLOUD_DATABASE: ${{ secrets.CHROMA_CLOUD_DATABASE }}
-          CHROMA_COLLECTION_NAME: mutual_fund_docs
-          PYTHONPATH: .
+          pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Run seed data refresher
+        working-directory: ./backend
         run: |
-          echo "Starting data ingestion..."
-          python scripts/ingest_data.py
-          echo "Ingestion complete"
-      
-      - name: Verify vector store created
+          echo "Starting seed data refresh..."
+          python scripts/refresh_seed_data.py
+          echo "Refresh complete."
+
+      - name: Verify seed_data.json was updated
+        working-directory: ./backend
         run: |
-          if [ -d "data/vector_store" ]; then
-            echo "Vector store directory exists"
-            ls -lh data/vector_store/
-            du -sh data/vector_store/
-          else
-            echo "ERROR: Vector store not created"
+          echo "--- Contents of data/seed_data.json (first 40 lines) ---"
+          head -40 data/seed_data.json
+          echo ""
+          FUND_COUNT=$(python -c "import json; d=json.load(open('data/seed_data.json')); print(len(d['funds']))")
+          echo "Total funds in seed file: $FUND_COUNT"
+          if [ "$FUND_COUNT" -lt 20 ]; then
+            echo "ERROR: Fund count is too low ($FUND_COUNT), something went wrong."
             exit 1
           fi
-      
-      - name: Upload vector store as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: vector-store-${{ github.run_id }}
-          path: backend/data/vector_store/
-      
-      - name: Upload processed data as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: processed-data-${{ github.run_id }}
-          path: backend/data/processed/
-      
+
+      - name: Commit & push updated seed data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backend/data/seed_data.json
+          # Only commit if the file actually changed
+          if git diff --cached --quiet; then
+            echo "No changes to seed_data.json — skipping commit."
+          else
+            git commit -m "chore(data): auto-refresh seed_data.json [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+            git push origin main
+            echo "✅ Pushed updated seed_data.json to main."
+          fi
+
       - name: Summary
         run: |
-          echo "## Ingestion Complete" >> $GITHUB_STEP_SUMMARY
+          echo "## 🌱 Seed Data Refresh Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Vector store path: \`backend/data/vector_store/\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Retention: 90 days" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Funds updated**: 25 (5 AMCs × 5 schemes)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Source**: backend/data/seed_data.json" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: Render auto-redeploys on new commit" >> $GITHUB_STEP_SUMMARY

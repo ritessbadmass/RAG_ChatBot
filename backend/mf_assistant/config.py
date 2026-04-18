@@ -139,7 +139,29 @@ ADVISORY_PATTERNS = [
 # Compliance and Resources
 AMFI_RESOURCES = "https://www.amfiindia.com/investor-corner/information-center/mutual-fund-faq"
 SEBI_RESOURCES = "https://investor.sebi.gov.in/"
-LAST_UPDATED_DATE = "April 14, 2026"
+
+
+def _read_last_updated() -> str:
+    """Read last_updated from seed_data.json so it always reflects real refresh date."""
+    import json
+    from pathlib import Path
+    possible = [
+        Path(__file__).parent.parent / "data" / "seed_data.json",
+        Path("./data/seed_data.json"),
+        Path("/app/data/seed_data.json"),
+    ]
+    for p in possible:
+        if p.exists():
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                return data.get("last_updated", "April 14, 2026")
+            except Exception:
+                pass
+    return "April 14, 2026"
+
+
+LAST_UPDATED_DATE = _read_last_updated()
 
 # Document sources
 MUTUAL_FUND_URLS = {
