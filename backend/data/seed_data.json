@@ -1,0 +1,74 @@
+{
+  "funds": [
+    {
+      "fund_name": "HDFC Flexi Cap Fund",
+      "amc": "HDFC",
+      "min_sip_amount": "Rs. 100",
+      "expense_ratio": "0.92%",
+      "exit_load": "1.0% if redeemed within 1 year",
+      "riskometer": "Very High",
+      "category": "Equity: Flexi Cap",
+      "source_url": "https://www.hdfcfund.com/product-literature/hdfc-flexi-cap-fund"
+    },
+    {
+      "fund_name": "SBI Bluechip Fund",
+      "amc": "SBI",
+      "min_sip_amount": "Rs. 500",
+      "expense_ratio": "0.88%",
+      "exit_load": "1.0% if redeemed within 1 year",
+      "riskometer": "Very High",
+      "category": "Equity: Large Cap",
+      "source_url": "https://www.sbimf.com/en-us/equity-schemes/sbi-bluechip-fund"
+    },
+    {
+      "fund_name": "ICICI Prudential Bluechip Fund",
+      "amc": "ICICI",
+      "min_sip_amount": "Rs. 100",
+      "expense_ratio": "0.75%",
+      "exit_load": "1.0% if redeemed within 1 year",
+      "riskometer": "Very High",
+      "category": "Equity: Large Cap",
+      "source_url": "https://www.icicipruamc.com/mutual-funds/equity-funds/icici-prudential-bluechip-fund"
+    },
+    {
+      "fund_name": "Nippon India Small Cap Fund",
+      "amc": "Nippon",
+      "min_sip_amount": "Rs. 100",
+      "expense_ratio": "0.70%",
+      "exit_load": "1.0% if redeemed within 1 month",
+      "riskometer": "Very High",
+      "category": "Equity: Small Cap",
+      "source_url": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-small-cap-fund"
+    },
+    {
+      "fund_name": "Kotak Flexicap Fund",
+      "amc": "Kotak",
+      "min_sip_amount": "Rs. 100",
+      "expense_ratio": "0.65%",
+      "exit_load": "1.0% if redeemed within 1 year",
+      "riskometer": "Very High",
+      "category": "Equity: Flexi Cap",
+      "source_url": "https://www.kotakmf.com/funds/equity-funds/kotak-flexicap-fund"
+    },
+    {
+      "fund_name": "SBI Small Cap Fund",
+      "amc": "SBI",
+      "min_sip_amount": "Rs. 500",
+      "expense_ratio": "0.68%",
+      "exit_load": "1.0% if redeemed within 1 year",
+      "riskometer": "Very High",
+      "category": "Equity: Small Cap",
+      "source_url": "https://www.sbimf.com/en-us/equity-schemes/sbi-small-cap-fund"
+    },
+    {
+      "fund_name": "HDFC Mid-Cap Opportunities Fund",
+      "amc": "HDFC",
+      "min_sip_amount": "Rs. 100",
+      "expense_ratio": "0.85%",
+      "exit_load": "1.0% if redeemed within 1 year",
+      "riskometer": "Very High",
+      "category": "Equity: Mid Cap",
+      "source_url": "https://www.hdfcfund.com/product-literature/hdfc-mid-cap-opportunities-fund"
+    }
+  ]
+}

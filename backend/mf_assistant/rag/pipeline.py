@@ -56,6 +56,16 @@ class DataPipeline:
         }
         
         try:
+            # Step 0: Process Seed Data (Fail-safe)
+            logger.info("\n[STEP 0/4] Ingesting verified seed data...")
+            seed_chunks = self._process_seed_data()
+            if seed_chunks:
+                logger.info(f"Loaded {len(seed_chunks)} seed data chunks")
+                seed_embeddings = self.embedder.embed_chunks_batch(seed_chunks)
+                self.vector_store.add_embeddings(seed_chunks, seed_embeddings)
+                stats['chunks_created'] += len(seed_chunks)
+                stats['embeddings_generated'] += len(seed_embeddings)
+
             # Step 1: Scrape
             logger.info("\n[STEP 1/4] Scraping documents...")
             scraped_data = self._scrape_documents(urls_config)
@@ -93,6 +103,49 @@ class DataPipeline:
         
         return stats
     
+    def _process_seed_data(self) -> List[Chunk]:
+        """Process verified seed data JSON into chunks."""
+        seed_file = Path("./data/seed_data.json")
+        if not seed_file.exists():
+            logger.warning(f"Seed data file not found at {seed_file}")
+            return []
+            
+        try:
+            with open(seed_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            chunks = []
+            for fund in data.get('funds', []):
+                # Create a factual text representation
+                content = f"""
+Fund: {fund['fund_name']}
+AMC: {fund['amc']}
+Minimum SIP: {fund['min_sip_amount']}
+Expense Ratio: {fund['expense_ratio']}
+Exit Load: {fund['exit_load']}
+Risk Level: {fund['riskometer']}
+Category: {fund['category']}
+
+Factual snippet for {fund['fund_name']} managed by {fund['amc']}. 
+Common Query: What is the minimum SIP for {fund['fund_name']}? Answer: {fund['min_sip_amount']}.
+Common Query: What is the exit load for {fund['fund_name']}? Answer: {fund['exit_load']}.
+"""
+                chunk = Chunk(
+                    text=content.strip(),
+                    metadata={
+                        'source_url': fund.get('source_url', 'internal://seed-data'),
+                        'amc': fund['amc'],
+                        'scheme': fund['fund_name'],
+                        'type': 'seed_fact'
+                    },
+                    source_url=fund.get('source_url', 'internal://seed-data')
+                )
+                chunks.append(chunk)
+            return chunks
+        except Exception as e:
+            logger.error(f"Failed to process seed data: {e}")
+            return []
+
     def _scrape_documents(self, urls_config: List[Dict]) -> List[ExtractedData]:
         """Scrape documents from URLs."""
         pipeline = ScrapingPipeline(self.scraper)
