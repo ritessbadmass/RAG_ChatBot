@@ -12,9 +12,10 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application code and seed data
 COPY mf_assistant/ ./mf_assistant/
 COPY scripts/ ./scripts/
+COPY data/ ./data/
 
 # Create data and cache directories
 RUN mkdir -p data/raw data/processed data/vector_store /model_cache
