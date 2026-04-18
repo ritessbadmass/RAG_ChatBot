@@ -255,8 +255,9 @@ Source: {fund['source_url']}
         thread_history: Optional[List[Dict]] = None
     ) -> tuple[str, str]:
         """Generate response using LLM with context."""
-        # Build messages
-        messages = [SystemMessage(content=self.SYSTEM_PROMPT)]
+        # Build messages with Context injected into the System Prompt
+        system_prompt_with_context = f"{self.SYSTEM_PROMPT}\n\n=== FACTUAL DATABASE ENTRIES ===\n{context}\n============================="
+        messages = [SystemMessage(content=system_prompt_with_context)]
         
         # Add thread history if available
         if thread_history:
@@ -266,11 +267,8 @@ Source: {fund['source_url']}
                 elif msg['role'] == 'assistant':
                     messages.append(AIMessage(content=msg['content']))
         
-        # Add context and current query
-        user_message = f"""Context:
-{context}
-
-Please answer the user's latest statement. If their latest statement is a follow-up or a correction to a previous question, use the conversation history to understand their full request before answering.
+        # Current query
+        user_message = f"""Please answer the user's latest statement. If their latest statement is a follow-up or a correction to a previous question, use the conversation history to understand their full request before answering.
 
 Latest Statement: {query}
 
