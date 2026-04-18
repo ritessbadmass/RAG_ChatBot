@@ -44,8 +44,6 @@ app = FastAPI(
 )
 
 # CORS middleware - configure for Vercel frontend
-import os
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -53,6 +51,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Root level health checks
+@app.get("/health")
+@app.get("/ping")
+async def health():
+    return {"status": "healthy", "service": settings.APP_NAME}
 
 # Include routers
 app.include_router(chat.router)
