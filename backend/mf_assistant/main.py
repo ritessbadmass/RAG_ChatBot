@@ -19,6 +19,24 @@ logger = logging.getLogger(__name__)
 settings = get_settings()
 
 
+def start_background_sync():
+    """Trigger seed data ingestion automatically on startup."""
+    import threading
+    from mf_assistant.rag.pipeline import get_pipeline
+    
+    def run():
+        try:
+            logger.info("AUTO-SYNC: Starting background seed ingestion...")
+            pipeline = get_pipeline()
+            # Passing [] runs Step 0 (Seed Data) instantly
+            pipeline.run_full_pipeline([])
+            logger.info("AUTO-SYNC: Background seed ingestion completed.")
+        except Exception as e:
+            logger.error(f"AUTO-SYNC: Failed: {e}")
+
+    threading.Thread(target=run, daemon=True).start()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan events."""
@@ -28,6 +46,9 @@ async def lifespan(app: FastAPI):
     # Create database tables
     create_tables()
     logger.info("Database tables created")
+    
+    # Start auto-sync so the bot is smart on boot
+    start_background_sync()
     
     yield
     
@@ -43,15 +64,22 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware - configure for Vercel frontend
+# CORS middleware - Explicitly allow Vercel frontend and common origins
+origins = [
+    "https://rag-chat-bot-gztc.vercel.app",
+    "https://rag-chat-bot-gztc-git-main-ritessbadmass-projects.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "*" # Fallback for other environments
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # Root level health checks
 @app.get("/health")
 @app.get("/ping")
