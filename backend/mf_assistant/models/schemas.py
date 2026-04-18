@@ -130,6 +130,7 @@ class ExtractedData(BaseModel):
     extracted_fields: Dict[str, Any] = Field(default_factory=dict)
     pdf_path: Optional[str] = None
     scraped_at: Optional[str] = None
+    metadata: Dict[str, Any] = Field(default_factory=dict)
     error: Optional[str] = None
     
     class Config:
