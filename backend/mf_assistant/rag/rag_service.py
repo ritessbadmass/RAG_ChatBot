@@ -270,7 +270,9 @@ Source: {fund['source_url']}
         user_message = f"""Context:
 {context}
 
-Question: {query}
+Please answer the user's latest statement. If their latest statement is a follow-up or a correction to a previous question, use the conversation history to understand their full request before answering.
+
+Latest Statement: {query}
 
 Provide a factual answer in maximum 3 sentences."""
         
