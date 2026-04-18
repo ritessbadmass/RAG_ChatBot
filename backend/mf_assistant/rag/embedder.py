@@ -18,9 +18,12 @@ class EmbeddingService:
     
     def __init__(self, model: str = None):
         self.model_name = model or settings.EMBEDDING_MODEL
-        # fastembed uses ONNX and is very memory efficient (~100MB total)
-        self.client = TextEmbedding(model_name=self.model_name)
-        logger.info(f"Initialized fastembed service with model: {self.model_name}")
+        # Use the pre-downloaded cache directory from Dockerfile
+        self.client = TextEmbedding(
+            model_name=self.model_name,
+            cache_dir="/model_cache"
+        )
+        logger.info(f"Initialized fastembed service with model: {self.model_name} (using pre-baked cache)")
     
     def embed_chunks(self, chunks: List[Chunk]) -> List[List[float]]:
         """
