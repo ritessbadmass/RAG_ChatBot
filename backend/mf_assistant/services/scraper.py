@@ -301,13 +301,17 @@ class MutualFundScraper:
         """Extract fund information from Kuvera URL structure."""
         data = {}
         
-        # URL format: https://kuvera.in/mutual-funds/fund/{fund-slug}--{code}
-        # Example: sbi-bluechip-direct-growth--SBI072-GR
+        # URL format: 
+        # 1. https://kuvera.in/mutual-funds/fund/{fund-slug}--{code}
+        # 2. https://kuvera.in/explore/{fund-slug}--{code}
         
+        # Split by '--' to separate slug and ISIN/code
         parts = url.split('--')
         if len(parts) >= 2:
-            # Extract fund slug
-            slug_part = parts[0].split('/')[-1]
+            # Extract fund slug from the first part
+            # It could be the last part of the path before '--'
+            path = urlparse(url).path
+            slug_part = path.split('--')[0].split('/')[-1]
             
             # Convert slug to readable name
             # sbi-bluechip-direct-growth -> SBI Bluechip Direct Growth
@@ -366,8 +370,16 @@ class MutualFundScraper:
         if 'description' in fund_info:
             content_parts.append(f"\nDescription: {fund_info['description']}")
         
+        # Extract metrics from raw text
+        metrics = self._parse_kuvera_text(raw_text)
+        if metrics:
+            content_parts.append("\n--- Factual Metrics ---")
+            for key, value in metrics.items():
+                if key not in ['fund_name', 'amc_name']:
+                    content_parts.append(f"{key.replace('_', ' ').title()}: {value}")
+        
         # Add any extracted metrics from raw text
-        content_parts.append("\n--- Additional Information ---")
+        content_parts.append("\n--- Raw Content ---")
         content_parts.append(raw_text[:5000])  # Add first 5000 chars of raw text
         
         return '\n'.join(content_parts)

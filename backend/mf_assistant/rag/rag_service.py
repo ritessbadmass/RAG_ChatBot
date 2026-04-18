@@ -160,7 +160,7 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
             "sources": sources
         }
     
-    def _retrieve_context(self, query: str, n_results: int = 5) -> tuple:
+    def _retrieve_context(self, query: str, n_results: int = 10) -> tuple:
         """
         Retrieve relevant context from vector store.
         

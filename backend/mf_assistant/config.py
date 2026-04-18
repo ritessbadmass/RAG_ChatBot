@@ -144,39 +144,39 @@ LAST_UPDATED_DATE = "April 14, 2026"
 # Document sources
 MUTUAL_FUND_URLS = {
     "SBI": {
-        "portal": "https://www.sbimf.com/en-us/offer-document-sid-kim",
-        "factsheets": "https://www.sbimf.com/en-us/portfolios",
-        "large_cap": "https://www.sbimf.com/en-us/equity-schemes/sbi-large-cap-fund",
-        "small_cap": "https://www.sbimf.com/en-us/equity-schemes/sbi-small-cap-fund",
-        "contra": "https://www.sbimf.com/en-us/equity-schemes/sbi-contra-fund"
+        "bluechip": "https://kuvera.in/explore/sbi-bluechip-fund--direct-plan--growth-option--SBI072-GR",
+        "small_cap": "https://kuvera.in/explore/sbi-small-cap-fund--direct-plan--growth-option--SBI230-GR",
+        "contra": "https://kuvera.in/explore/sbi-contra-fund--direct-plan--growth-option--SBI086-GR",
+        "large_cap": "https://kuvera.in/explore/sbi-large-cap-fund--direct-plan--growth-option--SBI061-GR",
+        "magnum_midcap": "https://kuvera.in/explore/sbi-magnum-midcap-fund--direct-plan--growth-option--SBI146-GR"
     },
     "ICICI": {
-        "portal": "https://www.icicipruamc.com/downloads",
-        "factsheets": "https://www.icicipruamc.com/downloads/factsheets",
-        "bluechip": "https://www.icicipruamc.com/mutual-funds/equity-funds/icici-prudential-bluechip-fund",
-        "value_discovery": "https://www.icicipruamc.com/mutual-funds/equity-funds/icici-prudential-value-discovery-fund",
-        "balanced_advantage": "https://www.icicipruamc.com/mutual-funds/hybrid-funds/icici-prudential-balanced-advantage-fund"
+        "bluechip": "https://kuvera.in/explore/icici-prudential-bluechip-fund--direct-plan--growth-option--ICICI317-GR",
+        "value_discovery": "https://kuvera.in/explore/icici-prudential-value-discovery-fund--direct-plan--growth-option--ICICI343-GR",
+        "balanced_advantage": "https://kuvera.in/explore/icici-prudential-balanced-advantage-fund--direct-plan--growth-option--ICICI363-GR",
+        "nasdaq_100": "https://kuvera.in/explore/icici-prudential-nasdaq-100-index-fund--direct-plan--growth-option--ICICI840-GR",
+        "multicap": "https://kuvera.in/explore/icici-prudential-multicap-fund--direct-plan--growth-option--ICICI333-GR"
     },
     "HDFC": {
-        "portal": "https://www.hdfcfund.com/investor-desk/product-literature/kim",
-        "factsheets": "https://www.hdfcfund.com/investor-desk/product-literature/factsheets",
-        "balanced_advantage": "https://www.hdfcfund.com/product-literature/product-literature-details?literature_type=kim&scheme_name=hdfc-balanced-advantage-fund",
-        "flexi_cap": "https://www.hdfcfund.com/product-literature/product-literature-details?literature_type=kim&scheme_name=hdfc-flexi-cap-fund",
-        "mid_cap_opportunities": "https://www.hdfcfund.com/product-literature/product-literature-details?literature_type=kim&scheme_name=hdfc-mid-cap-opportunities-fund"
+        "flexi_cap": "https://kuvera.in/explore/hdfc-flexi-cap-fund--direct-plan--growth-option--INF179K01UT0",
+        "balanced_advantage": "https://kuvera.in/explore/hdfc-balanced-advantage-fund--direct-plan--growth-option--HDFC175-GR",
+        "mid_cap_opportunities": "https://kuvera.in/explore/hdfc-mid-cap-opportunities-fund--direct-plan--growth-option--HDFC118-GR",
+        "top_100": "https://kuvera.in/explore/hdfc-top-100-fund--direct-plan--growth-option--HDFC018-GR",
+        "index_nifty_50": "https://kuvera.in/explore/hdfc-index-fund-nifty-50-plan--direct-plan--growth-option--HDFC229-GR"
     },
     "Nippon": {
-        "portal": "https://mf.nipponindiaim.com/investor-services/downloads/forms",
-        "factsheets": "https://mf.nipponindiaim.com/investor-services/downloads/factsheets",
-        "small_cap": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-small-cap-fund",
-        "multi_cap": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-multi-cap-fund",
-        "large_cap": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-large-cap-fund"
+        "small_cap": "https://kuvera.in/explore/nippon-india-small-cap-fund--direct-plan--growth-option--RN-072-GR",
+        "large_cap": "https://kuvera.in/explore/nippon-india-large-cap-fund--direct-plan--growth-option--RN-046-GR",
+        "growth_fund": "https://kuvera.in/explore/nippon-india-growth-fund--direct-plan--growth-option--RN-017-GR",
+        "multicap": "https://kuvera.in/explore/nippon-india-multi-cap-fund--direct-plan--growth-option--RN-049-GR",
+        "pharma": "https://kuvera.in/explore/nippon-india-pharma-fund--direct-plan--growth-option--RN-033-GR"
     },
     "Kotak": {
-        "portal": "https://www.kotakmf.com/Information/forms-and-downloads",
-        "factsheets": "https://www.kotakmf.com/Information/factsheet",
-        "flexicap": "https://www.kotakmf.com/funds/equity-funds/kotak-flexicap-fund",
-        "emerging_equities": "https://www.kotakmf.com/funds/equity-funds/kotak-emerging-equity-fund",
-        "small_cap": "https://www.kotakmf.com/funds/equity-funds/kotak-small-cap-fund"
+        "flexicap": "https://kuvera.in/explore/kotak-flexicap-fund--direct-plan--growth-option--KMF-165-GR",
+        "small_cap": "https://kuvera.in/explore/kotak-small-cap-fund--direct-plan--growth-option--KMF-078-GR",
+        "emerging_equities": "https://kuvera.in/explore/kotak-emerging-equity-fund--direct-plan--growth-option--KMF-069-GR",
+        "equity_opportunities": "https://kuvera.in/explore/kotak-equity-opportunities-fund--direct-plan--growth-option--KMF-026-GR",
+        "equity_hybrid": "https://kuvera.in/explore/kotak-equity-hybrid-fund--direct-plan--growth-option--KMF-160-GR"
     }
 }
 
