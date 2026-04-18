@@ -4,18 +4,13 @@ export default function KuveraHeader() {
       <div className="max-w-7xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo and Nav Links */}
         <div className="flex items-center gap-10">
-          <div className="flex items-center gap-2 cursor-pointer">
-            {/* Minimalist Kuvera-inspired geometric logo */}
-            <svg className="w-8 h-8 text-[var(--kuvera-teal)]" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" opacity="0.8" />
-            </svg>
-            <span className="text-xl font-bold tracking-tight text-[var(--kuvera-navy)]">kuvera</span>
+          <div className="flex items-center gap-1 cursor-pointer select-none">
+             <span className="text-2xl font-extrabold tracking-widest text-[#111111]">
+               KUVE<span className="bg-gradient-to-t from-black via-gray-500 to-transparent bg-clip-text text-transparent">R</span>A
+             </span>
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[var(--kuvera-text-muted)] mt-1">
-            <a href="#" className="text-[var(--kuvera-teal)] border-b-2 border-[var(--kuvera-teal)] pb-5 mt-5">Mutual Funds</a>
-            <a href="#" className="hover:text-[var(--kuvera-navy)] transition-colors pb-5 mt-5 border-b-2 border-transparent hover:border-[var(--kuvera-border)]">Stocks</a>
-            <a href="#" className="hover:text-[var(--kuvera-navy)] transition-colors pb-5 mt-5 border-b-2 border-transparent hover:border-[var(--kuvera-border)]">US Stocks</a>
-            <a href="#" className="hover:text-[var(--kuvera-navy)] transition-colors pb-5 mt-5 border-b-2 border-transparent hover:border-[var(--kuvera-border)]">Fixed Deposits</a>
+            <a href="#" className="text-black border-b-2 border-black pb-5 mt-5 transition-colors">Mutual Funds</a>
           </nav>
         </div>
 
