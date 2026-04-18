@@ -1,41 +1,45 @@
 {
   "last_updated": "April 18, 2026",
+  "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
       "fund_name": "HDFC Flexi Cap Fund",
       "amc": "HDFC",
+      "category": "Equity: Flexi Cap",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.92%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "category": "Equity: Flexi Cap",
-      "source_url": "https://www.hdfcfund.com/product-literature/hdfc-flexi-cap-fund"
+      "nav": "Rs. 2191.73 (as of 17-04-2026)"
     },
     {
       "fund_name": "HDFC Mid-Cap Opportunities Fund",
       "amc": "HDFC",
+      "category": "Equity: Mid Cap",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.85%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "category": "Equity: Mid Cap",
-      "source_url": "https://www.hdfcfund.com/product-literature/hdfc-mid-cap-opportunities-fund"
+      "nav": "Rs. 13.54 (as of 02-03-2016)"
     },
     {
       "fund_name": "HDFC Small Cap Fund",
       "amc": "HDFC",
       "category": "Equity: Small Cap",
-      "source_url": "https://www.hdfcfund.com/product-literature/hdfc-small-cap-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.60%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 10.21 (as of 17-04-2026)"
     },
     {
       "fund_name": "HDFC ELSS Tax Saver Fund",
       "amc": "HDFC",
       "category": "Equity: ELSS",
-      "source_url": "https://www.hdfcfund.com/product-literature/hdfc-elss-tax-saver",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 500",
       "expense_ratio": "1.05%",
       "exit_load": "Nil (3-year lock-in applies)",
@@ -45,147 +49,161 @@
       "fund_name": "HDFC Balanced Advantage Fund",
       "amc": "HDFC",
       "category": "Hybrid: Balanced Advantage",
-      "source_url": "https://www.hdfcfund.com/product-literature/hdfc-balanced-advantage-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.75%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 13.55 (as of 02-03-2016)"
     },
     {
       "fund_name": "SBI Bluechip Fund",
       "amc": "SBI",
+      "category": "Equity: Large Cap",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 500",
       "expense_ratio": "0.88%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "category": "Equity: Large Cap",
-      "source_url": "https://www.sbimf.com/en-us/equity-schemes/sbi-bluechip-fund"
+      "nav": "Rs. 103.51 (as of 17-04-2026)"
     },
     {
       "fund_name": "SBI Small Cap Fund",
       "amc": "SBI",
+      "category": "Equity: Small Cap",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 500",
       "expense_ratio": "0.68%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "category": "Equity: Small Cap",
-      "source_url": "https://www.sbimf.com/en-us/equity-schemes/sbi-small-cap-fund"
+      "nav": "Rs. 190.52 (as of 17-04-2026)"
     },
     {
       "fund_name": "SBI Magnum Midcap Fund",
       "amc": "SBI",
       "category": "Equity: Mid Cap",
-      "source_url": "https://www.sbimf.com/en-us/equity-schemes/sbi-magnum-midcap-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 500",
       "expense_ratio": "0.89%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 22.75 (as of 17-04-2026)"
     },
     {
       "fund_name": "SBI Long Term Equity Fund",
       "amc": "SBI",
       "category": "Equity: ELSS",
-      "source_url": "https://www.sbimf.com/en-us/equity-schemes/sbi-long-term-equity-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 500",
       "expense_ratio": "1.00%",
       "exit_load": "Nil (3-year lock-in applies)",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 177.94 (as of 17-04-2026)"
     },
     {
       "fund_name": "SBI Flexicap Fund",
       "amc": "SBI",
       "category": "Equity: Flexi Cap",
-      "source_url": "https://www.sbimf.com/en-us/equity-schemes/sbi-flexicap-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 500",
       "expense_ratio": "0.84%",
       "exit_load": "0.5% if redeemed within 30 days",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 106.89 (as of 17-04-2026)"
     },
     {
       "fund_name": "ICICI Prudential Bluechip Fund",
       "amc": "ICICI",
+      "category": "Equity: Large Cap",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.75%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "category": "Equity: Large Cap",
-      "source_url": "https://www.icicipruamc.com/mutual-funds/equity-funds/icici-prudential-bluechip-fund"
+      "nav": "Rs. 120.20 (as of 17-04-2026)"
     },
     {
       "fund_name": "ICICI Prudential Midcap Fund",
       "amc": "ICICI",
       "category": "Equity: Mid Cap",
-      "source_url": "https://www.icicipruamc.com/mutual-funds/equity-funds/icici-prudential-midcap-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.95%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 95.69 (as of 17-04-2026)"
     },
     {
       "fund_name": "ICICI Prudential Smallcap Fund",
       "amc": "ICICI",
       "category": "Equity: Small Cap",
-      "source_url": "https://www.icicipruamc.com/mutual-funds/equity-funds/icici-prudential-smallcap-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.87%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 1031.61 (as of 17-04-2026)"
     },
     {
       "fund_name": "ICICI Prudential ELSS Tax Saver Fund",
       "amc": "ICICI",
       "category": "Equity: ELSS",
-      "source_url": "https://www.icicipruamc.com/mutual-funds/equity-funds/icici-prudential-long-term-equity-fund-tax-saving",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 500",
       "expense_ratio": "1.05%",
       "exit_load": "Nil (3-year lock-in applies)",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 10.21 (as of 25-05-2018)"
     },
     {
       "fund_name": "ICICI Prudential Balanced Advantage Fund",
       "amc": "ICICI",
       "category": "Hybrid: Balanced Advantage",
-      "source_url": "https://www.icicipruamc.com/mutual-funds/hybrid-funds/icici-prudential-balanced-advantage-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.76%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Moderately High"
+      "riskometer": "Moderately High",
+      "nav": "Rs. 222.71 (as of 17-04-2026)"
     },
     {
       "fund_name": "Nippon India Small Cap Fund",
       "amc": "Nippon",
+      "category": "Equity: Small Cap",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.70%",
       "exit_load": "1.0% if redeemed within 1 month",
       "riskometer": "Very High",
-      "category": "Equity: Small Cap",
-      "source_url": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-small-cap-fund"
+      "nav": "Rs. 188.77 (as of 17-04-2026)"
     },
     {
       "fund_name": "Nippon India Large Cap Fund",
       "amc": "Nippon",
       "category": "Equity: Large Cap",
-      "source_url": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-large-cap-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.81%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 125.24 (as of 17-04-2026)"
     },
     {
       "fund_name": "Nippon India Growth Fund",
       "amc": "Nippon",
       "category": "Equity: Mid Cap",
-      "source_url": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-growth-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.98%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 17.92 (as of 14-09-2017)"
     },
     {
       "fund_name": "Nippon India Tax Saver Fund (ELSS)",
       "amc": "Nippon",
       "category": "Equity: ELSS",
-      "source_url": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-tax-saver-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 500",
       "expense_ratio": "1.10%",
       "exit_load": "Nil (3-year lock-in applies)",
@@ -195,61 +213,67 @@
       "fund_name": "Nippon India Flexi Cap Fund",
       "amc": "Nippon",
       "category": "Equity: Flexi Cap",
-      "source_url": "https://mf.nipponindiaim.com/funds/equity-funds/nippon-india-flexi-cap-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.79%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 165.47 (as of 17-04-2026)"
     },
     {
       "fund_name": "Kotak Flexicap Fund",
       "amc": "Kotak",
+      "category": "Equity: Flexi Cap",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.65%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "category": "Equity: Flexi Cap",
-      "source_url": "https://www.kotakmf.com/funds/equity-funds/kotak-flexicap-fund"
+      "nav": "Rs. 96.80 (as of 17-04-2026)"
     },
     {
       "fund_name": "Kotak Small Cap Fund",
       "amc": "Kotak",
       "category": "Equity: Small Cap",
-      "source_url": "https://www.kotakmf.com/funds/equity-funds/kotak-small-cap-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.52%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 212.54 (as of 17-04-2026)"
     },
     {
       "fund_name": "Kotak Bluechip Fund",
       "amc": "Kotak",
       "category": "Equity: Large Cap",
-      "source_url": "https://www.kotakmf.com/funds/equity-funds/kotak-bluechip-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.64%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 175.31 (as of 17-04-2026)"
     },
     {
       "fund_name": "Kotak ELSS Tax Saver Fund",
       "amc": "Kotak",
       "category": "Equity: ELSS",
-      "source_url": "https://www.kotakmf.com/funds/equity-funds/kotak-tax-saver-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 500",
       "expense_ratio": "0.78%",
       "exit_load": "Nil (3-year lock-in applies)",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 57.92 (as of 17-04-2026)"
     },
     {
       "fund_name": "Kotak Emerging Equity Fund",
       "amc": "Kotak",
       "category": "Equity: Mid Cap",
-      "source_url": "https://www.kotakmf.com/funds/equity-funds/kotak-emerging-equity-fund",
+      "source_url": "https://www.amfiindia.com/nav-history-download",
       "min_sip_amount": "Rs. 100",
       "expense_ratio": "0.36%",
       "exit_load": "1.0% if redeemed within 1 year",
-      "riskometer": "Very High"
+      "riskometer": "Very High",
+      "nav": "Rs. 673.15 (as of 17-04-2026)"
     }
   ]
 }
