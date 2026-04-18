@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import ChatMessage from '@/components/ChatMessage';
 import ChatInput from '@/components/ChatInput';
 import SuggestedQuestions from '@/components/SuggestedQuestions';
+import KuveraHeader from '@/components/KuveraHeader';
 import { sendMessage, createThread, ChatMessage as ChatMessageType } from '@/lib/api';
 
 type UIChatMessage = ChatMessageType & { source?: string; sourceUrl?: string; };
@@ -96,66 +97,62 @@ export default function Home() {
   };
 
   return (
-    <div className="flex justify-center h-screen overflow-hidden bg-[var(--kuvera-bg)] relative">
+    <div className="flex flex-col h-screen overflow-hidden bg-[var(--kuvera-bg)]">
+      {/* Kuvera Global Navigation */}
+      <KuveraHeader />
+
       {/* Main content */}
-      <main className="flex flex-col items-center justify-between w-full lg:px-8 px-4 relative max-h-screen">
+      <main className="flex-1 flex flex-col w-full max-w-5xl mx-auto relative overflow-hidden bg-white shadow-sm border-x border-[var(--kuvera-border)]">
         
-        {/* Fresh Start Button */}
-        <div className="absolute top-4 right-4 lg:top-8 lg:right-8 z-50">
+        {/* App Context Sub-header */}
+        <div className="w-full flex items-center justify-between py-4 px-6 border-b border-[var(--kuvera-border)] bg-[var(--kuvera-surface)] sticky top-0 z-20 shrink-0">
+          <div>
+            <h1 className="text-lg font-bold tracking-tight text-[var(--kuvera-navy)] flex items-center gap-2">
+              <span className="w-6 h-6 rounded-md bg-[var(--kuvera-teal-light)] flex items-center justify-center">
+                <svg className="w-3.5 h-3.5 text-[var(--kuvera-teal)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </span>
+              AI Fact Assistant
+            </h1>
+            <p className="text-xs text-[var(--kuvera-text-muted)] mt-1">Official AMC data only. No investment advice.</p>
+          </div>
           <button
             onClick={handleNewChat}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-[var(--kuvera-teal)] text-sm font-semibold rounded-full shadow-sm hover:shadow border border-[var(--kuvera-border)] transition-all active:scale-95"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--kuvera-bg)] text-[var(--kuvera-navy)] text-xs font-semibold rounded-md hover:bg-gray-100 border border-[var(--kuvera-border)] transition-all active:scale-95"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            Fresh Start
+            Clear Chat
           </button>
         </div>
-        
-        {/* Top Header & Disclaimer */}
-        <div className="w-full max-w-3xl pt-16 lg:pt-8 pb-4 bg-gradient-to-b from-[var(--kuvera-bg)] to-transparent sticky top-0 z-10 flex flex-col items-center">
-          <div className="w-12 h-12 bg-[var(--kuvera-teal-light)] rounded-2xl flex items-center justify-center mb-4 shadow-sm">
-            <svg className="w-6 h-6 text-[var(--kuvera-teal)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-[var(--kuvera-navy)] tracking-tight text-center">Mutual Fund Assistant</h1>
-          <p className="text-[var(--kuvera-text-muted)] text-sm mb-6 text-center max-w-sm">Get instant, factual answers about expense ratios, NAVs, and fund details.</p>
-          
-          <div className="w-full bg-yellow-50 border border-yellow-200 rounded-lg p-3 mx-4">
-            <p className="text-xs text-yellow-800 text-center flex items-center justify-center gap-2">
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <span><strong>Facts-only. No investment advice.</strong> Data sourced from official AMC documents.</span>
-            </p>
-          </div>
-        </div>
 
-        {/* Chat Area */}
-        <div className="w-full max-w-3xl flex-1 overflow-y-auto pb-32 scroll-smooth px-2">
-          {messages.length === 0 ? (
-            <div className="mt-8">
-              <SuggestedQuestions onSelect={handleSendMessage} />
-            </div>
-          ) : (
-            <div className="space-y-6 pt-4">
-              {messages.map((message, index) => (
-                <ChatMessage
-                  key={index}
-                  message={message}
-                  source={message.source}
-                  sourceUrl={message.sourceUrl}
-                />
-              ))}
-              <div ref={messagesEndRef} className="h-4" />
-            </div>
-          )}
+        {/* Chat Area Container */}
+        <div className="flex-1 overflow-y-auto scroll-smooth px-4 sm:px-8 pt-6 pb-40 flex flex-col items-center w-full">
+          <div className="w-full max-w-3xl">
+            {messages.length === 0 ? (
+              <div className="mt-4">
+                <SuggestedQuestions onSelect={handleSendMessage} />
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {messages.map((message, index) => (
+                  <ChatMessage
+                    key={index}
+                    message={message}
+                    source={message.source}
+                    sourceUrl={message.sourceUrl}
+                  />
+                ))}
+                <div ref={messagesEndRef} className="h-4" />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Input Area */}
-        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-[var(--kuvera-bg)] via-[var(--kuvera-bg)] to-transparent pt-10 pb-6 px-4 lg:px-8 flex justify-center items-center z-20 pointer-events-none">
+        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-white via-white to-transparent pt-12 pb-6 px-4 md:px-8 flex justify-center items-center z-30 pointer-events-none">
           <div className="w-full max-w-3xl pointer-events-auto">
             <ChatInput onSend={handleSendMessage} isLoading={isLoading} />
             <p className="text-[10px] text-[var(--kuvera-text-light)] text-center mt-3 tracking-wide uppercase">
