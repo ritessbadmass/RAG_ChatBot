@@ -17,7 +17,7 @@ openai==1.10.0  # For compatibility
 groq==0.4.2     # Fast LLM inference
 
 # Local Embeddings (Fast & Memory Efficient)
-fastembed==0.2.0
+fastembed>=0.3.4
 
 # Database
 sqlalchemy==2.0.25
