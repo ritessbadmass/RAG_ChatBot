@@ -202,8 +202,21 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
     def _fallback_seed_search(self, query: str) -> tuple:
         """Fallback search using direct keyword matching on seed data."""
         try:
-            seed_path = Path(__file__).parent.parent / "data" / "seed_data.json"
-            if not seed_path.exists():
+            # Try multiple possible paths for robustness
+            possible_paths = [
+                Path(__file__).parent.parent.parent / "data" / "seed_data.json", # backend/data/
+                Path("./data/seed_data.json"), # Current working directory
+                Path("/app/data/seed_data.json") # Absolute container path
+            ]
+            
+            seed_path = None
+            for p in possible_paths:
+                if p.exists():
+                    seed_path = p
+                    break
+            
+            if not seed_path:
+                logger.error("CRITICAL: Seed data file not found in any of the expected locations!")
                 return "", []
                 
             with open(seed_path, 'r', encoding='utf-8') as f:

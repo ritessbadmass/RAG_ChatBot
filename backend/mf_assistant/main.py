@@ -20,19 +20,20 @@ settings = get_settings()
 
 
 def start_background_sync():
-    """Trigger seed data ingestion automatically on startup."""
+    """Trigger data ingestion on startup."""
     import threading
-    from mf_assistant.rag.pipeline import get_pipeline
+    from mf_assistant.rag.pipeline import get_pipeline, build_urls_config
     
     def run():
         try:
-            logger.info("AUTO-SYNC: Starting background seed ingestion...")
+            # Seed data is now handled synchronously in lifespan for reliability
+            # This background thread now handles the heavier web scraping
+            logger.info("AUTO-SYNC: Starting background web scraping...")
             pipeline = get_pipeline()
-            # Passing [] runs Step 0 (Seed Data) instantly
-            pipeline.run_full_pipeline([])
-            logger.info("AUTO-SYNC: Background seed ingestion completed.")
+            pipeline.run_full_pipeline(build_urls_config())
+            logger.info("AUTO-SYNC: Background web scraping completed.")
         except Exception as e:
-            logger.error(f"AUTO-SYNC: Failed: {e}")
+            logger.error(f"AUTO-SYNC: Web scraping failed: {e}")
 
     threading.Thread(target=run, daemon=True).start()
 
@@ -47,7 +48,18 @@ async def lifespan(app: FastAPI):
     create_tables()
     logger.info("Database tables created")
     
-    # Start auto-sync so the bot is smart on boot
+    # LOAD SEED DATA IMMEDIATELY (Fail-safe)
+    try:
+        from mf_assistant.rag.pipeline import get_pipeline
+        pipeline = get_pipeline()
+        logger.info("AUTO-SYNC: Loading synchronous seed facts...")
+        # Passing an empty list to run_full_pipeline only runs the Seed Data step
+        pipeline.run_full_pipeline([])
+        logger.info("AUTO-SYNC: Seed facts loaded successfully.")
+    except Exception as e:
+        logger.error(f"AUTO-SYNC: Synchronous seed load failed: {e}")
+    
+    # Start web scraping in background
     start_background_sync()
     
     yield

@@ -155,3 +155,46 @@ async def vector_store_status() -> dict:
             "status": "error",
             "message": str(e)
         }
+
+
+@router.get("/debug/iq")
+async def debug_iq() -> dict:
+    """Diagnose if the server can see the seed data."""
+    import json
+    from pathlib import Path
+    
+    try:
+        possible_paths = [
+            Path(__file__).parent.parent.parent.parent / "data" / "seed_data.json", # backend/data/
+            Path("./data/seed_data.json"), # Current working directory
+            Path("/app/data/seed_data.json") # Absolute container path
+        ]
+        
+        seed_path = None
+        for p in possible_paths:
+            if p.exists():
+                seed_path = p
+                break
+                
+        if not seed_path:
+            return {
+                "status": "brain_dead",
+                "message": "seed_data.json could not be found anywhere.",
+                "searched_paths": [str(p) for p in possible_paths]
+            }
+            
+        with open(seed_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            funds = data.get("funds", [])
+            
+        return {
+            "status": "smart",
+            "message": "Vault is accessible.",
+            "fund_count": len(funds),
+            "path_used": str(seed_path)
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
