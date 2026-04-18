@@ -159,12 +159,12 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
                 "sources": sources
             }
 
-        answer = self._generate_response(query, context, thread_history)
+        answer, cited_source = self._generate_response(query, context, thread_history)
         
         # Step 6: Format final response
         return {
             "answer": answer,
-            "source_url": sources[0] if sources else "https://www.amfiindia.com",
+            "source_url": cited_source if cited_source else (sources[0] if sources else "https://www.amfiindia.com"),
             "query_type": query_type.value,
             "confidence": confidence,
             "sources": sources
@@ -224,15 +224,12 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
             with open(seed_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             
-            # Simple keyword matching for fund names
-            query_lower = query.lower()
-            tokens = re.findall(r'\w+', query_lower)
+            # Retrieve all seed data to guarantee complete factual context for the LLM
+            content_parts = []
+            sources = []
             
             for fund in data.get('funds', []):
-                fund_name_lower = fund['fund_name'].lower()
-                # If fund name keywords are in query
-                if any(word in query_lower for word in fund_name_lower.split()):
-                    content = f"""
+                content = f"""
 Fund: {fund['fund_name']}
 AMC: {fund['amc']}
 Minimum SIP: {fund['min_sip_amount']}
@@ -242,9 +239,11 @@ Risk Level: {fund['riskometer']}
 Category: {fund['category']}
 Source: {fund['source_url']}
 """
-                    return content.strip(), [fund['source_url']]
-            
-            return "", []
+                content_parts.append(content.strip())
+                if fund['source_url'] not in sources:
+                    sources.append(fund['source_url'])
+                    
+            return "\n\n".join(content_parts), sources
         except Exception as e:
             logger.error(f"Fallback search failed: {e}")
             return "", []
@@ -254,7 +253,7 @@ Source: {fund['source_url']}
         query: str,
         context: str,
         thread_history: Optional[List[Dict]] = None
-    ) -> str:
+    ) -> tuple[str, str]:
         """Generate response using LLM with context."""
         # Build messages
         messages = [SystemMessage(content=self.SYSTEM_PROMPT)]
@@ -280,21 +279,31 @@ Provide a factual answer in maximum 3 sentences."""
         # Generate response
         try:
             response = self.llm.invoke(messages)
-            answer = response.content.strip()
+            raw_answer = response.content.strip()
+            
+            # Extract source using regex
+            cited_source = ""
+            source_match = re.search(r'Source:\s*(https?://[^\s]+)', raw_answer, re.IGNORECASE)
+            if source_match:
+                cited_source = source_match.group(1)
+                # Remove the source line from the final answer text since the UI renders it separately
+                raw_answer = re.sub(r'Source:\s*https?://[^\s]+', '', raw_answer, flags=re.IGNORECASE).strip()
             
             # Ensure max 3 sentences
-            sentences = [s.strip() for s in answer.split('.') if s.strip()]
+            sentences = [s.strip() for s in raw_answer.split('.') if s.strip()]
             if len(sentences) > 3:
                 answer = '. '.join(sentences[:3]) + '.'
+            else:
+                answer = raw_answer
             
             # Append compliance footer
             answer = f"{answer}\n\nLast updated from sources: {LAST_UPDATED_DATE}"
             
-            return answer
+            return answer, cited_source
             
         except Exception as e:
             logger.error(f"LLM generation failed: {e}")
-            return "I encountered an error generating the response. Please try again."
+            return "I encountered an error generating the response. Please try again.", ""
     
     def _create_refusal_response(self) -> Dict:
         """Create refusal response for advisory queries."""
