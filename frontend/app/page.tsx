@@ -23,7 +23,6 @@ export default function Home() {
     scrollToBottom();
   }, [messages]);
 
-  // Create new thread on first load
   useEffect(() => {
     handleNewChat();
   }, []);
@@ -88,13 +87,10 @@ export default function Home() {
         },
       ]);
     } catch (error) {
-      // If thread is not found, it might have been reset on the server
       if (error instanceof Error && error.message.includes('not found')) {
-        console.warn('Thread not found, creating a new session...');
         try {
           const newThread = await createThread();
           setThreadId(newThread.thread_id);
-          // Retry sending with new thread ID
           const response = await sendMessage(content, newThread.thread_id, []);
           setMessages((prev) => [
             ...prev,
@@ -121,12 +117,8 @@ export default function Home() {
     }
   };
 
-  const handleSuggestedQuestion = (question: string) => {
-    handleSendMessage(question);
-  };
-
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+    <div className="flex h-screen overflow-hidden bg-[var(--kuvera-bg)]">
       {/* Sidebar */}
       <ThreadSidebar
         currentThreadId={threadId}
@@ -136,51 +128,59 @@ export default function Home() {
       />
 
       {/* Main content */}
-      <main className="flex-1 lg:ml-0">
-        <div className="max-w-3xl mx-auto px-4 py-8 min-h-screen flex flex-col">
-          {/* Header */}
-          <header className="text-center mb-8 lg:pl-0 pl-12">
-            <h1 className="text-3xl font-bold text-white mb-2">MF FAQ Assistant</h1>
-            <p className="text-white/80">Your trusted mutual fund information companion</p>
-          </header>
-
-          {/* Disclaimer */}
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
-            <p className="text-sm text-yellow-800">
-              <span className="font-semibold">[!]</span>{' '}
-              <strong>Facts-only. No investment advice.</strong> This chatbot provides factual information 
-              from official AMC documents only. Always consult a financial advisor before making investment decisions.
+      <main className="flex-1 flex flex-col items-center justify-between w-full lg:px-8 px-4 relative max-h-screen">
+        
+        {/* Top Header & Disclaimer */}
+        <div className="w-full max-w-3xl pt-16 lg:pt-8 pb-4 bg-gradient-to-b from-[var(--kuvera-bg)] to-transparent sticky top-0 z-10 flex flex-col items-center">
+          <div className="w-12 h-12 bg-[var(--kuvera-teal-light)] rounded-2xl flex items-center justify-center mb-4 shadow-sm">
+            <svg className="w-6 h-6 text-[var(--kuvera-teal)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold text-[var(--kuvera-navy)] tracking-tight text-center">Mutual Fund Assistant</h1>
+          <p className="text-[var(--kuvera-text-muted)] text-sm mb-6 text-center max-w-sm">Get instant, factual answers about expense ratios, NAVs, and fund details.</p>
+          
+          <div className="w-full bg-yellow-50 border border-yellow-200 rounded-lg p-3 mx-4">
+            <p className="text-xs text-yellow-800 text-center flex items-center justify-center gap-2">
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span><strong>Facts-only. No investment advice.</strong> Data sourced from official AMC documents.</span>
             </p>
           </div>
-
-          {/* Suggested Questions */}
-          {messages.length === 0 && (
-            <SuggestedQuestions onSelect={handleSuggestedQuestion} />
-          )}
-
-          {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto mb-6 space-y-4">
-            {messages.map((message, index) => (
-              <ChatMessage
-                key={index}
-                message={message}
-                source={message.source}
-                sourceUrl={message.sourceUrl}
-              />
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Chat Input */}
-          <div className="sticky bottom-0 bg-white/10 backdrop-blur-md rounded-2xl p-4">
-            <ChatInput onSend={handleSendMessage} isLoading={isLoading} />
-          </div>
-
-          {/* Footer */}
-          <footer className="text-center mt-6 text-white/60 text-sm">
-            Powered by Groq LLM | Data from official AMC sources | Updated daily at 9:15 AM IST
-          </footer>
         </div>
+
+        {/* Chat Area */}
+        <div className="w-full max-w-3xl flex-1 overflow-y-auto pb-32 scroll-smooth px-2">
+          {messages.length === 0 ? (
+            <div className="mt-8">
+              <SuggestedQuestions onSelect={handleSendMessage} />
+            </div>
+          ) : (
+            <div className="space-y-6 pt-4">
+              {messages.map((message, index) => (
+                <ChatMessage
+                  key={index}
+                  message={message}
+                  source={message.source}
+                  sourceUrl={message.sourceUrl}
+                />
+              ))}
+              <div ref={messagesEndRef} className="h-4" />
+            </div>
+          )}
+        </div>
+
+        {/* Input Area */}
+        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-[var(--kuvera-bg)] via-[var(--kuvera-bg)] to-transparent pt-10 pb-6 px-4 lg:px-8 flex justify-center items-center z-20 pointer-events-none">
+          <div className="w-full max-w-3xl pointer-events-auto">
+            <ChatInput onSend={handleSendMessage} isLoading={isLoading} />
+            <p className="text-[10px] text-[var(--kuvera-text-light)] text-center mt-3 tracking-wide uppercase">
+              Powered by RAG • Data updated continuously
+            </p>
+          </div>
+        </div>
+
       </main>
     </div>
   );
