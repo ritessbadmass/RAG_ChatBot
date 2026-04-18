@@ -16,9 +16,8 @@ chromadb==0.4.22
 openai==1.10.0  # For compatibility
 groq==0.4.2     # Fast LLM inference
 
-# Local Embeddings (Free)
-# Note: torch is installed as a dependency of sentence-transformers
-sentence-transformers==2.3.1
+# Local Embeddings (Fast & Memory Efficient)
+fastembed==0.2.0
 
 # Database
 sqlalchemy==2.0.25
