@@ -1,5 +1,6 @@
 """Chat API routes."""
 import logging
+import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -56,19 +57,22 @@ async def chat(
             detail=f"Query contains potential PII ({pii_type}). Please remove personal information."
         )
     
-    # Step 3: Get or create thread
+    # Step 3: Get or create thread (Self-healing logic)
     thread_manager = get_thread_manager()
-    if request.thread_id:
-        thread = thread_manager.get_thread(request.thread_id)
+    thread_id = request.thread_id
+    
+    if thread_id:
+        thread = thread_manager.get_thread(thread_id)
         if not thread:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Thread {request.thread_id} not found"
-            )
-        thread_id = request.thread_id
+            logger.warning(f"Thread {thread_id} not found. Automatically creating a new session.")
+            thread = thread_manager.create_thread()
+            thread_id = thread.id
     else:
         thread = thread_manager.create_thread()
         thread_id = thread.id
+    
+    # Update request thread_id for consistency
+    request.thread_id = thread_id
     
     # Step 4: Add user message to history
     thread_manager.add_message(
@@ -141,10 +145,13 @@ async def get_thread_history(thread_id: str) -> dict:
     thread = thread_manager.get_thread(thread_id)
     
     if not thread:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Thread {thread_id} not found"
-        )
+        logger.warning(f"Thread {thread_id} not found. Returning fresh thread skeleton.")
+        return {
+            "thread_id": thread_id,
+            "messages": [],
+            "created_at": datetime.datetime.utcnow().isoformat(),
+            "updated_at": datetime.datetime.utcnow().isoformat()
+        }
     
     return {
         "thread_id": thread.id,
