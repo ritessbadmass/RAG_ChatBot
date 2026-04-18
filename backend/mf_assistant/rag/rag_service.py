@@ -1,5 +1,8 @@
 """RAG (Retrieval-Augmented Generation) Service."""
+import json
 import logging
+import re
+from pathlib import Path
 from typing import Dict, List, Optional
 
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
@@ -131,6 +134,11 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
         # Step 4: Retrieve relevant documents
         context, sources = self._retrieve_context(query)
         
+        # Step 4.5: Fallback to Seed Data String Search if Vector search failed
+        if not context:
+            logger.info("Vector search returned no results, trying seed fallback...")
+            context, sources = self._fallback_seed_search(query)
+        
         if not context:
             return {
                 "answer": "I don't have information about that in my knowledge base. Please ask about specific mutual fund schemes.",
@@ -191,6 +199,41 @@ For educational resources and investment guidance, please visit AMFI: {AMFI_RESO
         context = "\n\n".join(context_parts)
         return context, list(sources)
     
+    def _fallback_seed_search(self, query: str) -> tuple:
+        """Fallback search using direct keyword matching on seed data."""
+        try:
+            seed_path = Path(__file__).parent.parent / "data" / "seed_data.json"
+            if not seed_path.exists():
+                return "", []
+                
+            with open(seed_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            # Simple keyword matching for fund names
+            query_lower = query.lower()
+            tokens = re.findall(r'\w+', query_lower)
+            
+            for fund in data.get('funds', []):
+                fund_name_lower = fund['fund_name'].lower()
+                # If fund name keywords are in query
+                if any(word in query_lower for word in fund_name_lower.split()):
+                    content = f"""
+Fund: {fund['fund_name']}
+AMC: {fund['amc']}
+Minimum SIP: {fund['min_sip_amount']}
+Expense Ratio: {fund['expense_ratio']}
+Exit Load: {fund['exit_load']}
+Risk Level: {fund['riskometer']}
+Category: {fund['category']}
+Source: {fund['source_url']}
+"""
+                    return content.strip(), [fund['source_url']]
+            
+            return "", []
+        except Exception as e:
+            logger.error(f"Fallback search failed: {e}")
+            return "", []
+
     def _generate_response(
         self,
         query: str,

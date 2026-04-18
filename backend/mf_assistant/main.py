@@ -64,18 +64,9 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware - Explicitly allow Vercel frontend and common origins
-origins = [
-    "https://rag-chat-bot-gztc.vercel.app",
-    "https://rag-chat-bot-gztc-git-main-ritessbadmass-projects.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:8000",
-    "*" # Fallback for other environments
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

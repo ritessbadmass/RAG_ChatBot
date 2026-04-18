@@ -105,7 +105,7 @@ class DataPipeline:
     
     def _process_seed_data(self) -> List[Chunk]:
         """Process verified seed data JSON into chunks."""
-        seed_file = Path("./data/seed_data.json")
+        seed_file = Path(__file__).parent.parent.parent / "data" / "seed_data.json"
         if not seed_file.exists():
             logger.warning(f"Seed data file not found at {seed_file}")
             return []
