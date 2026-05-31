@@ -1,5 +1,5 @@
 {
-  "last_updated": "May 30, 2026",
+  "last_updated": "May 31, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -65,7 +65,7 @@
       "expense_ratio": "0.88%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 101.63 (as of 29-05-2026)"
+      "nav": "Rs. 101.63 (as of 31-05-2026)"
     },
     {
       "fund_name": "SBI Small Cap Fund",
@@ -76,7 +76,7 @@
       "expense_ratio": "0.68%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 193.68 (as of 29-05-2026)"
+      "nav": "Rs. 193.68 (as of 31-05-2026)"
     },
     {
       "fund_name": "SBI Magnum Midcap Fund",
@@ -164,7 +164,7 @@
       "expense_ratio": "0.76%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Moderately High",
-      "nav": "Rs. 214.60 (as of 29-05-2026)"
+      "nav": "Rs. 214.59 (as of 31-05-2026)"
     },
     {
       "fund_name": "Nippon India Small Cap Fund",
@@ -218,7 +218,7 @@
       "expense_ratio": "0.79%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 168.07 (as of 29-05-2026)"
+      "nav": "Rs. 168.06 (as of 31-05-2026)"
     },
     {
       "fund_name": "Kotak Flexicap Fund",
