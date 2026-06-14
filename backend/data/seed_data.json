@@ -1,5 +1,5 @@
 {
-  "last_updated": "June 13, 2026",
+  "last_updated": "June 14, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -164,7 +164,7 @@
       "expense_ratio": "0.76%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Moderately High",
-      "nav": "Rs. 206.02 (as of 11-06-2026)"
+      "nav": "Rs. 208.15 (as of 12-06-2026)"
     },
     {
       "fund_name": "Nippon India Small Cap Fund",
@@ -240,7 +240,7 @@
       "expense_ratio": "0.52%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 226.13 (as of 11-06-2026)"
+      "nav": "Rs. 231.11 (as of 12-06-2026)"
     },
     {
       "fund_name": "Kotak Bluechip Fund",
@@ -251,7 +251,7 @@
       "expense_ratio": "0.64%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 178.20 (as of 11-06-2026)"
+      "nav": "Rs. 180.04 (as of 12-06-2026)"
     },
     {
       "fund_name": "Kotak ELSS Tax Saver Fund",
