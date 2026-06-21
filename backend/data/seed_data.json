@@ -1,5 +1,5 @@
 {
-  "last_updated": "June 20, 2026",
+  "last_updated": "June 21, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -98,7 +98,7 @@
       "expense_ratio": "1.00%",
       "exit_load": "Nil (3-year lock-in applies)",
       "riskometer": "Very High",
-      "nav": "Rs. 180.82 (as of 18-06-2026)"
+      "nav": "Rs. 181.48 (as of 19-06-2026)"
     },
     {
       "fund_name": "SBI Flexicap Fund",
@@ -109,7 +109,7 @@
       "expense_ratio": "0.84%",
       "exit_load": "0.5% if redeemed within 30 days",
       "riskometer": "Very High",
-      "nav": "Rs. 108.84 (as of 18-06-2026)"
+      "nav": "Rs. 109.03 (as of 19-06-2026)"
     },
     {
       "fund_name": "ICICI Prudential Bluechip Fund",
@@ -186,7 +186,7 @@
       "expense_ratio": "0.81%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 126.40 (as of 18-06-2026)"
+      "nav": "Rs. 125.97 (as of 19-06-2026)"
     },
     {
       "fund_name": "Nippon India Growth Fund",
