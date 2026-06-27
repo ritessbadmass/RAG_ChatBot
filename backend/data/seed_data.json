@@ -1,5 +1,5 @@
 {
-  "last_updated": "June 26, 2026",
+  "last_updated": "June 27, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -120,7 +120,7 @@
       "expense_ratio": "0.75%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 119.42 (as of 24-06-2026)"
+      "nav": "Rs. 119.69 (as of 25-06-2026)"
     },
     {
       "fund_name": "ICICI Prudential Midcap Fund",
@@ -229,7 +229,7 @@
       "expense_ratio": "0.65%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 96.18 (as of 23-06-2026)"
+      "nav": "Rs. 96.52 (as of 25-06-2026)"
     },
     {
       "fund_name": "Kotak Small Cap Fund",
