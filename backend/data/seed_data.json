@@ -1,5 +1,5 @@
 {
-  "last_updated": "July 04, 2026",
+  "last_updated": "July 05, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -109,7 +109,7 @@
       "expense_ratio": "0.84%",
       "exit_load": "0.5% if redeemed within 30 days",
       "riskometer": "Very High",
-      "nav": "Rs. 110.11 (as of 02-07-2026)"
+      "nav": "Rs. 110.22 (as of 03-07-2026)"
     },
     {
       "fund_name": "ICICI Prudential Bluechip Fund",
