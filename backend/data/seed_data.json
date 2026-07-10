@@ -1,5 +1,5 @@
 {
-  "last_updated": "July 09, 2026",
+  "last_updated": "July 10, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -11,7 +11,7 @@
       "expense_ratio": "0.92%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 2203.23 (as of 08-07-2026)"
+      "nav": "Rs. 2218.45 (as of 09-07-2026)"
     },
     {
       "fund_name": "HDFC Mid-Cap Opportunities Fund",
@@ -65,7 +65,7 @@
       "expense_ratio": "0.88%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 105.91 (as of 06-07-2026)"
+      "nav": "Rs. 104.00 (as of 09-07-2026)"
     },
     {
       "fund_name": "SBI Small Cap Fund",
@@ -76,7 +76,7 @@
       "expense_ratio": "0.68%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 204.40 (as of 08-07-2026)"
+      "nav": "Rs. 206.81 (as of 09-07-2026)"
     },
     {
       "fund_name": "SBI Magnum Midcap Fund",
@@ -87,7 +87,7 @@
       "expense_ratio": "0.89%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 23.28 (as of 08-07-2026)"
+      "nav": "Rs. 23.64 (as of 09-07-2026)"
     },
     {
       "fund_name": "SBI Long Term Equity Fund",
@@ -98,7 +98,7 @@
       "expense_ratio": "1.00%",
       "exit_load": "Nil (3-year lock-in applies)",
       "riskometer": "Very High",
-      "nav": "Rs. 180.64 (as of 08-07-2026)"
+      "nav": "Rs. 182.16 (as of 09-07-2026)"
     },
     {
       "fund_name": "SBI Flexicap Fund",
@@ -120,7 +120,7 @@
       "expense_ratio": "0.75%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 118.77 (as of 08-07-2026)"
+      "nav": "Rs. 119.21 (as of 09-07-2026)"
     },
     {
       "fund_name": "ICICI Prudential Midcap Fund",
@@ -131,7 +131,7 @@
       "expense_ratio": "0.95%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 99.05 (as of 08-07-2026)"
+      "nav": "Rs. 100.00 (as of 09-07-2026)"
     },
     {
       "fund_name": "ICICI Prudential Smallcap Fund",
@@ -142,7 +142,7 @@
       "expense_ratio": "0.87%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 1052.86 (as of 06-07-2026)"
+      "nav": "Rs. 1034.15 (as of 09-07-2026)"
     },
     {
       "fund_name": "ICICI Prudential ELSS Tax Saver Fund",
@@ -164,7 +164,7 @@
       "expense_ratio": "0.76%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Moderately High",
-      "nav": "Rs. 212.26 (as of 08-07-2026)"
+      "nav": "Rs. 214.68 (as of 09-07-2026)"
     },
     {
       "fund_name": "Nippon India Small Cap Fund",
@@ -175,7 +175,7 @@
       "expense_ratio": "0.70%",
       "exit_load": "1.0% if redeemed within 1 month",
       "riskometer": "Very High",
-      "nav": "Rs. 199.26 (as of 08-07-2026)"
+      "nav": "Rs. 202.31 (as of 09-07-2026)"
     },
     {
       "fund_name": "Nippon India Large Cap Fund",
@@ -186,7 +186,7 @@
       "expense_ratio": "0.81%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 126.02 (as of 08-07-2026)"
+      "nav": "Rs. 126.66 (as of 09-07-2026)"
     },
     {
       "fund_name": "Nippon India Growth Fund",
@@ -218,7 +218,7 @@
       "expense_ratio": "0.79%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 177.21 (as of 08-07-2026)"
+      "nav": "Rs. 179.30 (as of 09-07-2026)"
     },
     {
       "fund_name": "Kotak Flexicap Fund",
@@ -229,7 +229,7 @@
       "expense_ratio": "0.65%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 95.93 (as of 08-07-2026)"
+      "nav": "Rs. 96.57 (as of 09-07-2026)"
     },
     {
       "fund_name": "Kotak Small Cap Fund",
@@ -240,7 +240,7 @@
       "expense_ratio": "0.52%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 240.26 (as of 08-07-2026)"
+      "nav": "Rs. 242.81 (as of 09-07-2026)"
     },
     {
       "fund_name": "Kotak Bluechip Fund",
@@ -273,7 +273,7 @@
       "expense_ratio": "0.36%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 715.11 (as of 08-07-2026)"
+      "nav": "Rs. 722.93 (as of 09-07-2026)"
     }
   ]
 }
