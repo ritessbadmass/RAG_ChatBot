@@ -1,5 +1,5 @@
 {
-  "last_updated": "July 18, 2026",
+  "last_updated": "July 19, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -11,7 +11,7 @@
       "expense_ratio": "0.92%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 2227.48 (as of 14-07-2026)"
+      "nav": "Rs. 2248.74 (as of 17-07-2026)"
     },
     {
       "fund_name": "HDFC Mid-Cap Opportunities Fund",
