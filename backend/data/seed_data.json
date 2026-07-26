@@ -1,5 +1,5 @@
 {
-  "last_updated": "July 25, 2026",
+  "last_updated": "July 26, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -109,7 +109,7 @@
       "expense_ratio": "0.84%",
       "exit_load": "0.5% if redeemed within 30 days",
       "riskometer": "Very High",
-      "nav": "Rs. 112.37 (as of 23-07-2026)"
+      "nav": "Rs. 112.30 (as of 24-07-2026)"
     },
     {
       "fund_name": "ICICI Prudential Bluechip Fund",
@@ -175,7 +175,7 @@
       "expense_ratio": "0.70%",
       "exit_load": "1.0% if redeemed within 1 month",
       "riskometer": "Very High",
-      "nav": "Rs. 200.06 (as of 23-07-2026)"
+      "nav": "Rs. 200.46 (as of 24-07-2026)"
     },
     {
       "fund_name": "Nippon India Large Cap Fund",
