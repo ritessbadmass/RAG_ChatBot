@@ -1,5 +1,5 @@
 {
-  "last_updated": "August 01, 2026",
+  "last_updated": "August 02, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -98,7 +98,7 @@
       "expense_ratio": "1.00%",
       "exit_load": "Nil (3-year lock-in applies)",
       "riskometer": "Very High",
-      "nav": "Rs. 183.50 (as of 30-07-2026)"
+      "nav": "Rs. 184.46 (as of 31-07-2026)"
     },
     {
       "fund_name": "SBI Flexicap Fund",
