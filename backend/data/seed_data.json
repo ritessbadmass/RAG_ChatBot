@@ -1,5 +1,5 @@
 {
-  "last_updated": "August 15, 2026",
+  "last_updated": "August 16, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -131,7 +131,7 @@
       "expense_ratio": "0.95%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 104.18 (as of 13-08-2026)"
+      "nav": "Rs. 103.91 (as of 14-08-2026)"
     },
     {
       "fund_name": "ICICI Prudential Smallcap Fund",
@@ -164,7 +164,7 @@
       "expense_ratio": "0.76%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Moderately High",
-      "nav": "Rs. 238.13 (as of 13-08-2026)"
+      "nav": "Rs. 237.50 (as of 14-08-2026)"
     },
     {
       "fund_name": "Nippon India Small Cap Fund",
@@ -218,7 +218,7 @@
       "expense_ratio": "0.79%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 185.72 (as of 13-08-2026)"
+      "nav": "Rs. 185.72 (as of 14-08-2026)"
     },
     {
       "fund_name": "Kotak Flexicap Fund",
