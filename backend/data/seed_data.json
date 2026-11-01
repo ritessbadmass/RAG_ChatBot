@@ -1,5 +1,5 @@
 {
-  "last_updated": "October 31, 2026",
+  "last_updated": "November 01, 2026",
   "data_source": "NAV: api.mfapi.in (AMFI). Static fields: verified AMC disclosures.",
   "funds": [
     {
@@ -33,7 +33,7 @@
       "expense_ratio": "0.60%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 10.14 (as of 29-10-2026)"
+      "nav": "Rs. 10.15 (as of 30-10-2026)"
     },
     {
       "fund_name": "HDFC ELSS Tax Saver Fund",
@@ -65,7 +65,7 @@
       "expense_ratio": "0.88%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 99.56 (as of 30-10-2026)"
+      "nav": "Rs. 99.56 (as of 31-10-2026)"
     },
     {
       "fund_name": "SBI Small Cap Fund",
@@ -76,7 +76,7 @@
       "expense_ratio": "0.68%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 197.88 (as of 30-10-2026)"
+      "nav": "Rs. 197.88 (as of 31-10-2026)"
     },
     {
       "fund_name": "SBI Magnum Midcap Fund",
@@ -164,7 +164,7 @@
       "expense_ratio": "0.76%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Moderately High",
-      "nav": "Rs. 235.24 (as of 28-10-2026)"
+      "nav": "Rs. 236.40 (as of 31-10-2026)"
     },
     {
       "fund_name": "Nippon India Small Cap Fund",
@@ -218,7 +218,7 @@
       "expense_ratio": "0.79%",
       "exit_load": "1.0% if redeemed within 1 year",
       "riskometer": "Very High",
-      "nav": "Rs. 171.13 (as of 30-10-2026)"
+      "nav": "Rs. 171.12 (as of 31-10-2026)"
     },
     {
       "fund_name": "Kotak Flexicap Fund",
